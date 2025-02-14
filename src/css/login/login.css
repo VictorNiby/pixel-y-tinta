@@ -1,0 +1,99 @@
+.divider:after,
+.divider:before {
+content: "";
+flex: 1;
+height: 1px;
+background: #eee;
+}
+
+body {
+  background-position: center;
+
+  background-size: cover;
+}
+
+div.container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.card{
+  padding: 40px;
+  border-radius: 30px;
+  background-color: #2e2e2e;
+}
+
+.btn-back{
+  color: white !important;
+  font-size: 30px;
+  width: max-content;
+  height: max-content;
+  transition: transform .3s ease-out;
+}
+
+.btn-back:hover{
+  transform: scale(1.5);
+}
+
+
+.card-body{
+  position: relative !important;
+}
+
+.sign-up{
+  width: 100% !important;
+  color: #58a6ff;
+  text-decoration: none;
+  transition: .2s ease-in-out;
+}
+
+.sign-up:hover{
+  color: #1f78df;
+}
+
+
+input{
+  border: none !important;
+  color: white !important;
+  background-color: #4b4b4b !important;
+}
+
+input:focus{
+  color: rgb(247, 247, 247) !important;
+  border: none !important;
+}
+
+label{
+  color: white !important;
+}
+
+p{
+  color: white !important;
+}
+
+.form-floating > input + label:after {
+  text-decoration-color: white;
+  background: none !important;
+}
+
+a.btn-primary{
+  width: 100%;
+}
+
+button[type=submit]{
+  width: 100%;
+  border: none;
+  background-color: #28993e;
+}
+
+button[type=submit]:hover{
+  background-color: #0d6d20;
+}
+
+@media screen and (min-width:400px) {
+
+  input{
+    margin-top: 20px;
+  }
+}
