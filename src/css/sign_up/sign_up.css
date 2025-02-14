@@ -1,0 +1,55 @@
+body {
+    max-width: 100vw;
+    max-height: 100vh;
+    background-position: center;  
+    background-size: cover;
+    scrollbar-width: 50px;
+}
+
+div.container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.card{
+    width: 50%;
+    padding: 40px;
+    border-radius: 30px;
+    background-color: #2e2e2e;
+}
+
+.card-body *{
+    overflow: hidden !important;
+}
+
+label{
+    color: white !important;
+}
+.form-floating > input + label:after, .form-floating > select + label:after{
+    text-decoration-color: white;
+    background: none !important;
+}
+
+select{
+    border: none !important;
+    color: white !important;
+    background-color: #4b4b4b !important;
+}
+
+input{
+    border: none !important;
+    color: white !important;
+    background-color: #4b4b4b !important;
+}
+  
+button[type=submit]{
+    width: 100%;
+    border: none;
+    background-color: #28993e;
+  }
+  
+button[type=submit]:hover{
+background-color: #0d6d20;
+}
