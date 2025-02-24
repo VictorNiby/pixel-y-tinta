@@ -1,25 +1,35 @@
-//Librerias basicas
+/**
+ * @param express - Instancia de la libreria express
+ * @param app - Variable que almacena el metodo express
+ * @param cors - Instancia de la libreria cors
+ * 
+  * @function app.use(cors()) -Usamos la instancia app para manejar los requests de formato json
+ * @function app.use(express.json()) -Usamos la instancia app para manejar los requests de formato json
+ * 
+ * @constant conexion - Instanciamos la ruta donde se encuentra la conexion a la base de datos
+ * 
+ * @constant {param} - Instanciamos las rutas de cada controller
+ * 
+ * @function app.use('/api',ruta_inst) - Funcion que utiliza las rutas isntanciadas
+ * 
+ * @function app.listen() -Abre el puerto donde se almacena nuestro servidor
+ */
 const express = require('express');
 const app = express();
 const cors = require("cors");
-//Middleware 
+
 app.use(cors());
 app.use(express.json());
 
-//Llamamos la libreria de conexión
 const conexion = require('./models/bd_conexion.js');
 conexion();
 
-//Rutas globales
 // const ProductoRta = require('./Routes/productos.js');
 // const UsuarioRta = require('./Routes/usuarios.js');
-
-//Usamos la ruta
 
 // app.use("/api",ProductoRta);
 // app.use('/api',UsuarioRta);
 
-app.listen(4000,()=>{
-    console.log(`Puerto:${4000}`);
-    
+app.listen(puerto = 4000,()=>{
+    console.log(`Puerto:${puerto}`);
 })
