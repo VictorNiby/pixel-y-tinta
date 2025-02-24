@@ -1,5 +1,5 @@
 /**
-@file bd_conexion.js
+@function bd_conexion
 @description Módulo para establecer la conexión a la base de datos MongoDB usando Mongoose. Proporciona una función asincrónica que gestiona posibles errores durante la conexión.
 @param Mongoose instanciar la libreria en una constante
 @param Conexion instarciar la conexión en una funcion asincrónica y espera la respuesta de la base de datos.

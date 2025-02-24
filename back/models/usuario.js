@@ -1,5 +1,5 @@
 /**
-@file usuario.js
+@function usuario
 @description Modúlo de la base de datos para la tabla usuario.
 @param Schema_Model instanciar la libreria en una constante
 @param Usuario_schema instanciar constante con los datos que tendrá la base de datos
