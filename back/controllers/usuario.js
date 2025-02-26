@@ -138,28 +138,26 @@ const recuperar_password = async (req,resp)=>{
     }
 
     try {
-        let consulta = await usuarios.find({correo_usuario:correo_usuario}).lean().exec()
 
-        if (consulta) {
-            let id_usuario = 0
+        let id
+        let consulta = usuarios.find({correo_usuario:correo_usuario}).exec()
+        .then(async(data)=>{
+            id = data[0]._id
 
-            console.log(consulta);
+            if (id) {
+                await usuarios.findByIdAndUpdate(id,datos).exec()
+                return resp.send({
+                    completado: true,
+                    mensaje: `Contraseña actualizada`
+                })
+            }else{
+                return resp.send({
+                    completado: false,
+                    mensaje: `No se encontró el usuario`
+                })
+            }
             
-            let actualización = await usuarios.findByIdAndUpdate(id_usuario,datos).exec()
-
-            return resp.send({
-                completado: true,
-                mensaje: `Se cambió la contraseña correctamente`,
-                datos:actualización
-            })
-
-        }else{
-
-            return resp.send({
-                completado: false,
-                mensaje: `No se encontró el usuario`
-            })
-        }
+        })
 
 
     } catch (error) {
