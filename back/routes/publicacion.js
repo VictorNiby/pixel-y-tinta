@@ -1,3 +1,10 @@
+/**
+@function ruta_publicacion
+@description Ruta de las api para cada funcion.
+@param control_publicacion llama el controller para traer las funciones
+@param Router + (GET,PUT,POST,DELETE)
+@param Exports exporta el router
+*/
 const express = require("express");
 const router = express.Router();
 const control_publicacion = require("../controllers/publicacion");
