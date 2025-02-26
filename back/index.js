@@ -21,8 +21,8 @@ conexion();
 //=====================================================================
 const publicacion_ruta = require("./routes/publicacion.js");
 const usuario_ruta = require("./routes/usuario.js");
-app.use("/api/publicaciones", publicacion_ruta);
-app.use("/api/usuarios", usuario_ruta);
+app.use("/api", publicacion_ruta);
+app.use("/api", usuario_ruta);
 //=====================================================================
 const puerto = 4000;
 app.listen(puerto, () => {});
