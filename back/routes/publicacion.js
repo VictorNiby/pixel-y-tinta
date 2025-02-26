@@ -17,7 +17,7 @@ router.post(
   control_publicacion.crear_publicacion
 );
 router.get(
-  "/publicacion/buscar_publicacion/id:",
+  "/publicacion/buscar_publicacion/:id",
   control_publicacion.buscar_publicacion_id
 );
 router.delete(
