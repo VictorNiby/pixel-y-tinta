@@ -13,6 +13,10 @@ const usuario_schema = Schema(
           type: String,
           required: true,
         },
+        fecha_nacimiento:{
+          type: String,
+          required: true
+        },
         correo_usuario: {
           type: String,
           required: true,
@@ -30,4 +34,4 @@ const usuario_schema = Schema(
           default: "",
         }
     },{ collection: "usuario" });
-    module.exports=model("usuario",usuario_schema);
+module.exports=model("usuario",usuario_schema);
