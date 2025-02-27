@@ -7,14 +7,11 @@
  * @param buscar_publicacion_id Busca una publicación específica por su ID.
  * @param borrar_publicacion_id Elimina una publicación según su ID.
  * @param actualizar_publicacion_id Actualiza los datos de una publicación identificada por su ID.
- * @param agregar_comentario Añade un comentario a una publicación por su ID.
- * @param eliminar_comentario Elimina un comentario específico de una publicación.
+ * @param crear_comentario Añade un comentario a una publicación por su ID.
+ * @param borrar_comentario Elimina un comentario específico de una publicación.
  * @param module.exports Exporta las funciones para ser utilizadas en las rutas.
  */
-
 const publicacion = require("../models/publicacion");
-
-// Listar todas las publicaciones
 const listar_publicacion = async (req, res) => {
   try {
     const lista_publicacion = await publicacion.find();
@@ -29,18 +26,19 @@ const listar_publicacion = async (req, res) => {
     });
   }
 };
-
-// Crear una nueva publicación
 const crear_publicacion = async (req, res) => {
-  const { nombre_publicacion, creador_publicacion, contenido_publicacion, estado_publicacion } = req.body;
-
+  const {
+    nombre_publicacion,
+    creador_publicacion,
+    contenido_publicacion,
+    estado_publicacion,
+  } = req.body;
   if (!nombre_publicacion || !creador_publicacion || !contenido_publicacion) {
     return res.status(400).json({
       completado: false,
       mensaje: "Faltan campos obligatorios.",
     });
   }
-
   try {
     const nueva_publicacion = new publicacion({
       nombre_publicacion,
@@ -61,11 +59,8 @@ const crear_publicacion = async (req, res) => {
     });
   }
 };
-
-// Buscar una publicación por ID
 const buscar_publicacion_id = async (req, res) => {
   const { id } = req.params;
-
   try {
     const publicacionEncontrada = await publicacion.findById(id);
     if (!publicacionEncontrada) {
@@ -85,11 +80,8 @@ const buscar_publicacion_id = async (req, res) => {
     });
   }
 };
-
-// Eliminar una publicación por ID
 const borrar_publicacion_id = async (req, res) => {
   const { id } = req.params;
-
   try {
     const publicacionEliminada = await publicacion.findByIdAndDelete(id);
     if (!publicacionEliminada) {
@@ -109,12 +101,9 @@ const borrar_publicacion_id = async (req, res) => {
     });
   }
 };
-
-// Actualizar una publicación por ID
 const actualizar_publicacion_id = async (req, res) => {
   const { id } = req.params;
   const { nombre_publicacion, contenido_publicacion } = req.body;
-
   try {
     const publicacionActualizada = await publicacion.findByIdAndUpdate(
       id,
@@ -125,14 +114,12 @@ const actualizar_publicacion_id = async (req, res) => {
       },
       { new: true }
     );
-
     if (!publicacionActualizada) {
       return res.status(404).json({
         completado: false,
         mensaje: "Publicación no encontrada.",
       });
     }
-
     res.status(200).json({
       completado: true,
       mensaje: "Publicación actualizada correctamente.",
@@ -145,9 +132,7 @@ const actualizar_publicacion_id = async (req, res) => {
     });
   }
 };
-
-// Añadir un comentario a una publicación
-const agregar_comentario = async (req, res) => {
+const crear_comentario = async (req, res) => {
   const { id } = req.params;
   const { nombre_usuario, comentario_usuario } = req.body;
 
@@ -157,7 +142,6 @@ const agregar_comentario = async (req, res) => {
       mensaje: "El nombre y el comentario son obligatorios.",
     });
   }
-
   try {
     const publicacionActualizada = await publicacion.findByIdAndUpdate(
       id,
@@ -171,14 +155,12 @@ const agregar_comentario = async (req, res) => {
       },
       { new: true }
     );
-
     if (!publicacionActualizada) {
       return res.status(404).json({
         completado: false,
         mensaje: "Publicación no encontrada.",
       });
     }
-
     res.status(200).json({
       completado: true,
       mensaje: "Comentario agregado correctamente.",
@@ -191,11 +173,8 @@ const agregar_comentario = async (req, res) => {
     });
   }
 };
-
-// Eliminar un comentario por índice
-const eliminar_comentario = async (req, res) => {
-  const { id, indice } = req.params;
-
+const borrar_comentario_id = async (req, res) => {
+  const { id, comentarioId } = req.params;
   try {
     const publicacionEncontrada = await publicacion.findById(id);
     if (!publicacionEncontrada) {
@@ -204,10 +183,11 @@ const eliminar_comentario = async (req, res) => {
         mensaje: "Publicación no encontrada.",
       });
     }
-
-    publicacionEncontrada.comentarios.splice(indice, 1);
+    publicacionEncontrada.comentarios =
+      publicacionEncontrada.comentarios.filter(
+        (comentario) => comentario._id.toString() !== comentarioId
+      );
     await publicacionEncontrada.save();
-
     res.status(200).json({
       completado: true,
       mensaje: "Comentario eliminado correctamente.",
@@ -220,13 +200,47 @@ const eliminar_comentario = async (req, res) => {
     });
   }
 };
-
+const editar_comentario_id = async (req, res) => {
+  const { id, comentarioId } = req.params;
+  const { nombre_usuario, comentario_usuario } = req.body;
+  try {
+    const publicacionEncontrada = await publicacion.findById(id);
+    if (!publicacionEncontrada) {
+      return res.status(404).json({
+        completado: false,
+        mensaje: "Publicación no encontrada.",
+      });
+    }
+    const comentario = publicacionEncontrada.comentarios.id(comentarioId);
+    if (!comentario) {
+      return res.status(404).json({
+        completado: false,
+        mensaje: "Comentario no encontrado.",
+      });
+    }
+    if (nombre_usuario) comentario.nombre_usuario = nombre_usuario;
+    if (comentario_usuario) comentario.comentario_usuario = comentario_usuario;
+    comentario.fecha_publicacion = Date.now();
+    await publicacionEncontrada.save();
+    res.status(200).json({
+      completado: true,
+      mensaje: "Comentario actualizado correctamente.",
+      publicacion: publicacionEncontrada,
+    });
+  } catch (error) {
+    res.status(500).json({
+      completado: false,
+      mensaje: `Error al editar el comentario: ${error.message}`,
+    });
+  }
+};
 module.exports = {
   listar_publicacion,
   crear_publicacion,
   buscar_publicacion_id,
   borrar_publicacion_id,
   actualizar_publicacion_id,
-  agregar_comentario,
-  eliminar_comentario,
+  crear_comentario,
+  borrar_comentario_id,
+  editar_comentario_id,
 };

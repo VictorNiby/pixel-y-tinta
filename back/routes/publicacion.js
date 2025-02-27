@@ -28,4 +28,16 @@ router.put(
   "/publicacion/actualizar_publicacion/:id",
   control_publicacion.actualizar_publicacion_id
 );
+router.post(
+  "/publicacion/crear_comentario/:id",
+  control_publicacion.crear_comentario
+);
+router.delete(
+  "/publicacion/:id/borrar_comentario/:comentarioId",
+  control_publicacion.borrar_comentario_id
+);
+router.put(
+  "/publicacion/:id/actualizar_comentario/:comentarioId",
+  control_publicacion.editar_comentario_id
+);
 module.exports = router;
