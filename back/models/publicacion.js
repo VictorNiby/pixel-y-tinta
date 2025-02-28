@@ -21,16 +21,19 @@ const publicacion_schema = Schema(
       type: String,
       required: true,
     },
+    imagen_publicacion: {
+       type: String,
+    },
     fecha_publicacion: {
       type: Date,
       default: Date.now,
     },
     estado_publicacion: {
       type: String,
-      enum: ["borrador", "publicado", "archivado", "editado"],
-      default: "borrador",
+      enum: ["publicado", "archivado", "editado"],
+      default: "publicado",
     },
-    vistas: {
+    likes: {
       type: Number,
       default: 0,
     },

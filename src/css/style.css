@@ -6,26 +6,53 @@ body {
     width: 100%;
     min-height: 100vh;
 }
+.animate-submit,
+.animate-areatexto {
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  }
+  .animate-submit:hover {
+    transform: scale(1.03);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+  }
+  .animate-areatexto:hover {
+    transform: scale(1.03);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+  }
+.animated-brand {
+    font-size: 22px;
+    font-weight: bold;
+    text-decoration: none;
+    color: #333;
+    transition: transform 0.3s ease-in-out, color 0.3s ease-in-out;
+  }
+  .animated-brand:hover {
+    transform: scale(1.1);
+    color: white;
+  }
+  .search-bar:hover,
+  .search-bar:focus {
+    transform: scale(1.05);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+  }
+  
+.animate-btn {
+    transition: all 0.3s ease-in-out;
+    transform: scale(0.9);
+  }
+  .animate-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+  }  
 .navbar {
     background-color: #161b22;
     padding: 0.5rem 1rem;
     position: sticky;
     top: 0;
     z-index: 1000;
+    border-bottom: 1px solid #30363d;
 }
 .navbar-brand, .btn-outline-primary, .btn-primary {
     color: #c9d1d9;
-}
-.search-bar {
-    width: 50%;
-    border-radius: 50px;
-    padding: 0.5rem 1rem;
-    border: 1px solid #30363d;
-    background-color: #0d1117;
-    color: #c9d1d9;
-}
-.search-bar::placeholder {
-    color: #8b949e;
 }
 .blog-container {
     max-width: 1000px;
@@ -108,4 +135,27 @@ footer {
     padding: 2rem;
     margin-top: 2rem;
     border-top: 1px solid #30363d;
+}
+.btn-round {
+    transition: all 0.3s ease-in-out;
+    transform: scale(1.0);
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background-color: #30363d;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    cursor: pointer;
+    font-size: 1.5rem;
+    color: #6c757d;
+    transition: background-color 0.3s ease;
+}
+
+.btn-round:hover {
+    transition: all 0.3s ease-in-out;
+    transform: scale(1.2);
+    background-color: #30363d;
+    color: #2ea043;
 }

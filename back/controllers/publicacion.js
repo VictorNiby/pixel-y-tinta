@@ -32,6 +32,7 @@ const crear_publicacion = async (req, res) => {
     creador_publicacion,
     contenido_publicacion,
     estado_publicacion,
+    imagen_publicacion,
   } = req.body;
   if (!nombre_publicacion || !creador_publicacion || !contenido_publicacion) {
     return res.status(400).json({
@@ -44,7 +45,8 @@ const crear_publicacion = async (req, res) => {
       nombre_publicacion,
       creador_publicacion,
       contenido_publicacion,
-      estado_publicacion: estado_publicacion || "borrador",
+      estado_publicacion: estado_publicacion || "publicado",
+      imagen_publicacion,
     });
     await nueva_publicacion.save();
     res.status(201).json({
