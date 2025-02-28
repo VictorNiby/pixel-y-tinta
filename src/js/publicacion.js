@@ -6,24 +6,25 @@ fetch(api + "listar_publicacion")
 .then((res) => { 
 console.log(res);
 res.publicaciones.forEach((publicacion) => {
-let div = document.getElementById('algo')
+let div = document.getElementById('publicaciones')
 div.insertAdjacentHTML('beforeend', `
-    <div class="post">
-        <div class="post-header">
-            <div class="d-flex align-items-center">
-                <div class="username">@${publicacion.creador_publicacion} :</div>
-                <div class="post-title">${publicacion.nombre_publicacion}</div>
-            </div>
-        </div>
-        <p>${publicacion.contenido_publicacion}</p>
-        <div class="post-footer">
-            <div>
-                <button class="icon-btn"><i class="bi bi-chat"></i></button>
-                <button class="icon-btn"><i class="bi bi-heart"></i><span>${publicacion.likes}</span></button>
-            </div>
-            <div class="timestamp">Hace 2 horas</div>
-        </div>
+            <section class="card mb-4">
+<div class="card-body">
+<header class="d-flex justify-content-between">
+    <div class="d-flex align-items-center gap-2">
+        <span class="fw-bold text-light">@${publicacion.creador_publicacion} :</span>
+        <span class="text-light">${publicacion.nombre_publicacion}</span>
     </div>
+    <span class="text-muted">Hace 2 horas</span>
+</header>
+<p class="mt-3 text-light">${publicacion.contenido_publicacion}</p>
+<p class="mt-3 text-light">${publicacion.imagen_publicacion}</p>
+
+    <button class="btn btn-outline-light me-2"><i class="bi bi-chat"></i><span> 5 </span></button>
+    <button class="btn btn-outline-light"><i class="bi bi-heart"></i> <span>${publicacion.likes}</span></button>
+
+</div>
+        </section>
 `);
 div.lastElementChild.offsetHeight;
 });

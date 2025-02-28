@@ -1,133 +1,10 @@
-body {
-    display: flex;
-    flex-direction: column;
-    background-color: #0d1117;
-    color: #c9d1d9;
-    width: 100%;
-    min-height: 100vh;
-}
-.animate-submit,
-.animate-areatexto {
-    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-  }
-  .animate-submit:hover {
-    transform: scale(1.1);
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
-  }
-  .animate-areatexto:hover {
-    transform: scale(1.03);
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
-  }
-.animated-brand {
-    font-size: 22px;
-    font-weight: bold;
-    text-decoration: none;
-    color: #333;
-    transition: transform 0.3s ease-in-out, color 0.3s ease-in-out;
-  }
-  .animated-brand:hover {
-    transform: scale(1.1);
-    color: white;
-  }
-  .search-bar:hover,
-  .search-bar:focus {
-    transform: scale(1.05);
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
-  }
-  
-.animate-btn {
+/*  transition: all 0.3s ease-in-out;
+    transform: scale(1.0);
+    transition: background-color 0.3s ease;
     transition: all 0.3s ease-in-out;
-    transform: scale(0.9);
-  }
-  .animate-btn:hover {
-    transform: scale(1.1);
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
-  }  
-.navbar {
-    background-color: #161b22;
-    padding: 0.5rem 1rem;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    border-bottom: 1px solid #30363d;
-}
-.navbar-brand, .btn-outline-primary, .btn-primary {
-    color: #c9d1d9;
-}
-.blog-container {
-    max-width: 1000px;
-    margin: auto;
-    padding: 1.5rem;
-}
-.create-post {
-    background: #161b22;
-    border-radius: 8px;
-    padding: 1.5rem;
-    margin-bottom: 1rem;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-}
-.form-control, .form-label {
-    background-color: #0d1117;
-    color: #c9d1d9;
-    border: 1px solid #30363d;
-}
-.form-control::placeholder {
-    color: #8b949e;
-}
-.form-control:focus {
-    background-color: #0d1117;
-    color: #c9d1d9;
-    border-color: #238636;
-    box-shadow: none;
-}
-.btn-primary {
-    background-color: #238636;
-    border: none;
-}
-.btn-primary:hover {
-    background-color: #2ea043;
-}
-.post {
-    background: #161b22;
-    border-radius: 8px;
-    padding: 1.5rem;
-    margin-bottom: 1rem;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-}
-.post-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
-}
-.username {
-    font-weight: bold;
-    color: #c9d1d9;
-}
-.post-title {
-    font-weight: bold;
-    color: #58a6ff;
-    margin-left: 1rem;
-}
-.timestamp {
-    color: #8b949e;
-    font-size: 0.9rem;
-}
-.post-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-.icon-btn {
-    background: none;
-    border: none;
-    color: #c9d1d9;
-    cursor: pointer;
-    font-size: 1.2rem;
-}
-.icon-btn:hover {
-    color: #58a6ff;
-}
+    transform: scale(1.3);
+    PARA LAS ANIMACIONES    
+*/
 footer {
     background-color: #161b22;
     color: #c9d1d9;
@@ -136,26 +13,37 @@ footer {
     margin-top: 2rem;
     border-top: 1px solid #30363d;
 }
-.btn-round {
-    transition: all 0.3s ease-in-out;
-    transform: scale(1.0);
-    width: 38px;
-    height: 38px;
-    border-radius: 50%;
-    background-color: #30363d;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: none;
-    cursor: pointer;
-    font-size: 1.5rem;
-    color: #6c757d;
-    transition: background-color 0.3s ease;
+body {
+    background-color: #0d1117;
+    color: #c9d1d9;
 }
-
-.btn-round:hover {
-    transition: all 0.3s ease-in-out;
-    transform: scale(1.3);
-    background-color: #30363d;
-    color: #2ea043;
+.navbar, footer {
+    background-color: #161b22;
+    border-bottom: 1px solid #30363d;
+}
+.card {
+    background-color: #161b22;
+    border: 1px solid #30363d;
+}
+.form-control, .btn, .navbar-brand, a {
+    color: #c9d1d9;
+}
+.form-control::placeholder {
+    color: #8b949e;
+}
+.btn-success {
+    background-color: #238636;
+    border: none;
+}
+.btn-success:hover {
+    background-color: #2ea043;
+}
+a:hover {
+    color: #58a6ff;
+}
+.text-muted {
+    color: #8b949e !important;
+}
+.form-label {
+    font-weight: bold;
 }

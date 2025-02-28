@@ -3,60 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pixel y Tinta - Blog</title>
+    <title>Blog Responsive</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="../src/css/style.css">
 </head>
 <body>
-    <nav class="navbar navbar-expand-md">
-        <div class="container-fluid d-flex justify-content-between align-items-center">
-            <!-- Logo a la izquierda -->
-            <a class="navbar-brand animated-brand" href="index.html">Pixel y Tinta</a>
-            
-            <!-- Botones a la derecha -->
-            <div class="d-flex gap-2">
-                <a class="btn btn-outline-primary animate-btn" href="./login/login.html">Sign in</a>
-                <a class="btn btn-primary animate-btn" href="./sign_up/sign_up.html">Sign up</a>
+    <nav class="navbar navbar-expand-lg p-3">
+        <div class="container d-flex justify-content-between">
+            <a href="#" class="navbar-brand">Pixel y Tinta</a>
+            <div>
+                <a href="#" class="btn btn-outline-light me-2">Sign in</a>
+                <a href="#" class="btn btn-success">Sign up</a>
             </div>
         </div>
     </nav>
     
-
-    <div class="blog-container mt-3">
-        <div class="create-post">
-            <div class="row">
-                <div class="col-9"><input class="form-control animate-areatexto" id="titulo" rows="1" placeholder="Titulo de la publicación"></input></div>
-                <div class="col-1 d-flex justify-content-end">
-                    <label for="fileUpload" class="btn btn-round">
-                        <i class="bi bi-image"></i>
-                    </label>
-                    <input type="file" id="imagen" class="d-none">
-                </div>
-                <div class="col-2 d-flex justify-content-end">
-                    <button id="publicar" class="btn btn-primary w-100 animate-submit">Publicar</button>
-                </div>
+    <main class="container my-4">
+        <section class="card mb-4">
+            <div class="card-body">
+                <form>
+                    <div class="mb-3">
+                        <input type="text" class="form-control" id="titulo" placeholder="Título de la publicación">
+                    </div>
+                    <div class="mb-3">
+                        <textarea class="form-control" id="contenido" rows="3" placeholder="¿Qué estás pensando?"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <input type="file" class="form-control" id="imagen">
+                    </div>
+                    <button type="" class="btn btn-success w-100">Publicar</button>
+                </form>
             </div>
-            
-            <form>
-                <textarea class="form-control mt-3 animate-areatexto" id="contenido" rows="4" placeholder="¿Qué estás pensando?"></textarea>
-            </form>
+        </section>
 
-        </div>
+        <section id="publicaciones">
 
-        
+        </section>
+    </main>
 
-        <div id="algo">
-
-        </div>
-
-
-    </div>
-
-    <footer>
-        <p>Contacto profesional: <a href="mailto:nibyminson@gmail.com" style="color: #58a6ff; text-decoration: none;">nibyminson@gmail.com</a></p>
-        <p>&copy; 2025 Pixel y Tinta - Todos los derechos reservados</p>
+    <footer class="text-center p-3">
+        <p>Contacto profesional: <a href="mailto:nibyminson@gmail.com">nibyminson@gmail.com</a></p>
+        <p>© 2025 Pixel y Tinta - Todos los derechos reservados</p>
     </footer>
+
     <script src="../src/js/publicacion.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
