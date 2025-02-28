@@ -14,9 +14,23 @@
         .navbar {
             background-color: #161b22;
             padding: 0.5rem 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
         .navbar-brand, .btn-outline-primary, .btn-primary {
             color: #c9d1d9;
+        }
+        .search-bar {
+            width: 50%;
+            border-radius: 50px;
+            padding: 0.5rem 1rem;
+            border: 1px solid #30363d;
+            background-color: #0d1117;
+            color: #c9d1d9;
+        }
+        .search-bar::placeholder {
+            color: #8b949e;
         }
         .blog-container {
             max-width: 1000px;
@@ -60,13 +74,18 @@
         }
         .post-header {
             display: flex;
-            align-items: center;
             justify-content: space-between;
+            align-items: center;
             margin-bottom: 1rem;
         }
         .username {
             font-weight: bold;
             color: #c9d1d9;
+        }
+        .post-title {
+            font-weight: bold;
+            color: #58a6ff;
+            margin-left: 1rem;
         }
         .timestamp {
             color: #8b949e;
@@ -74,7 +93,8 @@
         }
         .post-footer {
             display: flex;
-            gap: 15px;
+            justify-content: space-between;
+            align-items: center;
         }
         .icon-btn {
             background: none;
@@ -86,12 +106,21 @@
         .icon-btn:hover {
             color: #58a6ff;
         }
+        footer {
+            background-color: #161b22;
+            color: #c9d1d9;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 2rem;
+            border-top: 1px solid #30363d;
+        }
     </style>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg">
-        <div class="container-fluid">
+        <div class="container-fluid d-flex justify-content-between align-items-center w-100">
             <a class="navbar-brand" href="#">Pixel y Tinta</a>
+            <input type="text" class="search-bar" placeholder="Buscar...">
             <div class="d-flex">
                 <button class="btn btn-outline-primary me-2">Sign in</button>
                 <button class="btn btn-primary">Sign up</button>
@@ -110,34 +139,47 @@
 
         <div class="post">
             <div class="post-header">
-                <div>
-                    <div class="username">@Ginyu</div>
-                    <div class="timestamp">Hace 2 horas</div>
+                <div class="d-flex align-items-center">
+                    <div class="username">@Ginyu :</div>
+                    <div class="post-title">Samba do Ginyu</div>
                 </div>
+                <div class="timestamp">Hace 2 horas</div>
             </div>
             <p>E quando o Sol raiar, alegria vai chegar
                 Todo mondo vai dançar, a vida vai brilhar
                 Quando o amor te conquistar.</p>
             <div class="post-footer">
-                <button class="icon-btn"><i class="bi bi-chat"></i></button>
-                <button class="icon-btn"><i class="bi bi-heart"></i></button>
+                <div>
+                    <button class="icon-btn"><i class="bi bi-chat"></i></button>
+                    <button class="icon-btn"><i class="bi bi-heart"></i><span> 0 </span></button>
+                </div>
             </div>
         </div>
 
         <div class="post">
             <div class="post-header">
-                <div>
-                    <div class="username">@Ginyu</div>
-                    <div class="timestamp">Hace 1 día</div>
+                <div class="d-flex align-items-center">
+                    <div class="username">@Ginyu :</div>
+                    <div class="post-title">Samba do Ginyu</div>
                 </div>
+                <div class="timestamp">Hace 2 horas</div>
             </div>
-            <p>Piedra papel o tijeras, el que gane coge a vegeta, el que no, a los niños.</p>
+            <p>E quando o Sol raiar, alegria vai chegar
+                Todo mondo vai dançar, a vida vai brilhar
+                Quando o amor te conquistar.</p>
             <div class="post-footer">
-                <button class="icon-btn"><i class="bi bi-chat"></i></button>
-                <button class="icon-btn"><i class="bi bi-heart"></i><span> 10 </span></button>
+                <div>
+                    <button class="icon-btn"><i class="bi bi-chat"></i></button>
+                    <button class="icon-btn"><i class="bi bi-heart"></i><span> 0 </span></button>
+                </div>
             </div>
         </div>
     </div>
+
+    <footer>
+        <p>Contacto profesional: <a href="mailto:nibyminson@gmail.com" style="color: #58a6ff; text-decoration: none;">nibyminson@gmail.com</a></p>
+        <p>&copy; 2025 Pixel y Tinta - Todos los derechos reservados</p>
+    </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
