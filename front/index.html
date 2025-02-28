@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pixel y Tinta - Blog</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #0d1117;
+            color: #c9d1d9;
+        }
+        .navbar {
+            background-color: #161b22;
+            padding: 0.5rem 1rem;
+        }
+        .navbar-brand, .btn-outline-primary, .btn-primary {
+            color: #c9d1d9;
+        }
+        .blog-container {
+            max-width: 1000px;
+            margin: auto;
+            padding: 1.5rem;
+        }
+        .create-post {
+            background: #161b22;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+        }
+        .form-control, .form-label {
+            background-color: #0d1117;
+            color: #c9d1d9;
+            border: 1px solid #30363d;
+        }
+        .form-control::placeholder {
+            color: #8b949e;
+        }
+        .form-control:focus {
+            background-color: #0d1117;
+            color: #c9d1d9;
+            border-color: #238636;
+            box-shadow: none;
+        }
+        .btn-primary {
+            background-color: #238636;
+            border: none;
+        }
+        .btn-primary:hover {
+            background-color: #2ea043;
+        }
+        .post {
+            background: #161b22;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+        }
+        .post-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+        .username {
+            font-weight: bold;
+            color: #c9d1d9;
+        }
+        .timestamp {
+            color: #8b949e;
+            font-size: 0.9rem;
+        }
+        .post-footer {
+            display: flex;
+            gap: 15px;
+        }
+        .icon-btn {
+            background: none;
+            border: none;
+            color: #c9d1d9;
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+        .icon-btn:hover {
+            color: #58a6ff;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Pixel y Tinta</a>
+            <div class="d-flex">
+                <button class="btn btn-outline-primary me-2">Sign in</button>
+                <button class="btn btn-primary">Sign up</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="blog-container mt-3">
+        <div class="create-post">
+            <h5>Crear una publicación</h5>
+            <form>
+                <textarea class="form-control mb-2" id="postContent" rows="3" placeholder="¿Qué estás pensando?"></textarea>
+                <button type="submit" class="btn btn-primary w-100">Publicar</button>
+            </form>
+        </div>
+
+        <div class="post">
+            <div class="post-header">
+                <div>
+                    <div class="username">@Ginyu</div>
+                    <div class="timestamp">Hace 2 horas</div>
+                </div>
+            </div>
+            <p>E quando o Sol raiar, alegria vai chegar
+                Todo mondo vai dançar, a vida vai brilhar
+                Quando o amor te conquistar.</p>
+            <div class="post-footer">
+                <button class="icon-btn"><i class="bi bi-chat"></i></button>
+                <button class="icon-btn"><i class="bi bi-heart"></i></button>
+            </div>
+        </div>
+
+        <div class="post">
+            <div class="post-header">
+                <div>
+                    <div class="username">@Ginyu</div>
+                    <div class="timestamp">Hace 1 día</div>
+                </div>
+            </div>
+            <p>Piedra papel o tijeras, el que gane coge a vegeta, el que no, a los niños.</p>
+            <div class="post-footer">
+                <button class="icon-btn"><i class="bi bi-chat"></i></button>
+                <button class="icon-btn"><i class="bi bi-heart"></i><span> 10 </span></button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
