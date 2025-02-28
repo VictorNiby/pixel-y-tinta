@@ -1,0 +1,111 @@
+body {
+    display: flex;
+    flex-direction: column;
+    background-color: #0d1117;
+    color: #c9d1d9;
+    width: 100%;
+    min-height: 100vh;
+}
+.navbar {
+    background-color: #161b22;
+    padding: 0.5rem 1rem;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+.navbar-brand, .btn-outline-primary, .btn-primary {
+    color: #c9d1d9;
+}
+.search-bar {
+    width: 50%;
+    border-radius: 50px;
+    padding: 0.5rem 1rem;
+    border: 1px solid #30363d;
+    background-color: #0d1117;
+    color: #c9d1d9;
+}
+.search-bar::placeholder {
+    color: #8b949e;
+}
+.blog-container {
+    max-width: 1000px;
+    margin: auto;
+    padding: 1.5rem;
+}
+.create-post {
+    background: #161b22;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+.form-control, .form-label {
+    background-color: #0d1117;
+    color: #c9d1d9;
+    border: 1px solid #30363d;
+}
+.form-control::placeholder {
+    color: #8b949e;
+}
+.form-control:focus {
+    background-color: #0d1117;
+    color: #c9d1d9;
+    border-color: #238636;
+    box-shadow: none;
+}
+.btn-primary {
+    background-color: #238636;
+    border: none;
+}
+.btn-primary:hover {
+    background-color: #2ea043;
+}
+.post {
+    background: #161b22;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+.post-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+.username {
+    font-weight: bold;
+    color: #c9d1d9;
+}
+.post-title {
+    font-weight: bold;
+    color: #58a6ff;
+    margin-left: 1rem;
+}
+.timestamp {
+    color: #8b949e;
+    font-size: 0.9rem;
+}
+.post-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.icon-btn {
+    background: none;
+    border: none;
+    color: #c9d1d9;
+    cursor: pointer;
+    font-size: 1.2rem;
+}
+.icon-btn:hover {
+    color: #58a6ff;
+}
+footer {
+    background-color: #161b22;
+    color: #c9d1d9;
+    text-align: center;
+    padding: 2rem;
+    margin-top: 2rem;
+    border-top: 1px solid #30363d;
+}
