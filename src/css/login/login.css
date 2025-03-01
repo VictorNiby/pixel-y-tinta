@@ -1,98 +1,93 @@
 .divider:after,
 .divider:before {
-content: "";
-flex: 1;
-height: 1px;
-background: #eee;
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: #eee;
 }
 
-body {
-  background-position: center;
-  background-size: cover;
-}
-
-div.container{
+body{
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-direction: column;
+  min-height: 100vh !important;
+  margin: 0;
+  padding: 0;
+  background-color: rgb(29, 29, 29);
 }
 
-.card{
-  padding: 40px;
-  border-radius: 30px;
-  background-color: #2e2e2e;
+.container-fluid{
+  display: flex;
+  justify-content: center !important;
+  align-content: center !important;
+  padding: 0  !important;
+  margin: 0 !important;
 }
 
-.btn-back{
-  color: white !important;
-  font-size: 30px;
-  width: max-content;
-  height: max-content;
-  transition: transform .3s ease-out;
+footer {
+  background-color: #161b22;
+  color: #c9d1d9;
+  text-align: center;
+  padding: 2rem;
+  margin-top: auto;
+  border-top: 1px solid #30363d;
 }
 
-.btn-back:hover{
-  transform: scale(1.5);
-}
-
-
-.card-body{
+.password-container{
   position: relative !important;
 }
 
-.sign-up{
-  width: 100% !important;
-  color: #58a6ff;
+.label-password{
+  top: 17% !important;
+  left: 93%;
+  position: absolute;
+}
+.label-password:hover{
+  cursor: pointer;
+}
+
+.link-signup{
+  color: rgb(11, 125, 255);
+  transition: color .2s ease-in-out;
+}
+
+.link-signup:hover{
   text-decoration: none;
-  transition: .2s ease-in-out;
 }
-
-.sign-up:hover{
-  color: #1f78df;
-}
-
 
 input{
-  border: none !important;
-  color: white !important;
-  background-color: #4b4b4b !important;
-}
-
-input:focus{
-  color: rgb(247, 247, 247) !important;
-  border: none !important;
-}
-
-label{
-  color: white !important;
-}
-
-p{
-  color: white !important;
-}
-
-.form-floating > input + label:after {
-  text-decoration-color: white;
-  background: none !important;
-}
-
-a.btn-primary{
-  width: 100%;
-}
-
-button[type=submit]{
-  width: 100%;
   border: none;
-  background-color: #28993e;
+  background-color: #30363d !important;
+  color: white !important;
 }
 
-button[type=submit]:hover{
-  background-color: #0d6d20;
+section{
+  width: 80%;
+  color: white;
+  margin-top: 20px;
+  background-color: #303030;
+  border-radius: 10px;
+  padding: 20px;
 }
 
-@media screen and (min-width:400px) {
+.input-group-text{
+  background-color: #30363d !important;
+  color: white !important;
+  transition: background .2s ease-in-out;
+}
 
-  input{
-    margin-top: 20px;
+.input-group-text:hover{
+  cursor: pointer;
+  background-color: rgb(33, 136, 253) !important; 
+}
+
+select{
+  border: none;
+  background-color: #30363d !important;
+  color: white !important;
+}
+
+@media (max-width: 450px) {
+  .h-custom {
+    height: 100%;
   }
 }
