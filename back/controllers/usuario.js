@@ -226,7 +226,7 @@ const log_in = async (req,resp)=>{
 
                 return resp.send({
                     completado: true,
-                    mensaje: "ok",
+                    mensaje: "Completado",
                     token: token
                 });
 
@@ -244,7 +244,7 @@ const log_in = async (req,resp)=>{
     } catch (error) {
         return resp.send({
             completado: false,
-            mensaje:"Ocurrió un error: "+error
+            mensaje:"Faltan datos"
         })
     }
 
