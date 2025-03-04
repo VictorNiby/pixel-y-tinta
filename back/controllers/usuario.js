@@ -70,14 +70,13 @@ const insertar_usuario = async (req,resp)=>{
         fecha_nacimiento:req.body.fecha_nacimiento,
         correo_usuario:req.body.correo_usuario,
         password_usuario:bcrypt.hashSync(req.body.password_usuario,10),
-        is_admin:req.body.is_admin,
         pais_usuario:req.body.pais_usuario
     }
 
     try {
      
-        const usuario_existe = await usuario.findOne({ email: datos.correo_usuario });
-
+        const usuario_existe = await usuario.findOne({ correo_usuario: datos.correo_usuario });
+        
         if (usuario_existe) {
             return resp.send({
                 completado:false,
@@ -96,12 +95,15 @@ const insertar_usuario = async (req,resp)=>{
         }
 
     } catch (error) {
+        console.log(error);
+        
         return resp.send({
             completado:false,
-            mensaje:`Ocurrió un error durante el proceso: ${error}`
+            mensaje:`Faltan datos`
         })
-
     }
+
+    
 }
 
 const editar_usuario = async (req,resp)=>{

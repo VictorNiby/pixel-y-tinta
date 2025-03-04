@@ -23,15 +23,6 @@ body{
   margin: 0 !important;
 }
 
-footer {
-  background-color: #161b22;
-  color: #c9d1d9;
-  text-align: center;
-  padding: 2rem;
-  margin-top: auto;
-  border-top: 1px solid #30363d;
-}
-
 .password-container{
   position: relative !important;
 }

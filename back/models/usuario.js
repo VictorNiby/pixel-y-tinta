@@ -31,7 +31,7 @@ const usuario_schema = Schema(
         },
         pais_usuario: {
           type: String,
-          default: "",
+          required:true,
         }
     },{ collection: "usuario" });
 module.exports=model("usuario",usuario_schema);

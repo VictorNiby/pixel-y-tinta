@@ -1,12 +1,23 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Inicio de Sesión</title>
+	<title>Registro</title>
    <!--Made with love by Mutiullah Samim -->
 	<!--Bootsrap 4 CDN-->
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+	
+
+	<!-- CSS -->
+	<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/css/alertify.min.css"/>
+	<!-- Default theme -->
+	<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/css/themes/default.min.css"/>
+	<!-- Semantic UI theme -->
+	<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/css/themes/semantic.min.css"/>
+	<!-- Bootstrap theme -->
+	<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/css/themes/bootstrap.min.css"/>
 
 	<!--Custom styles-->
 	<link rel="stylesheet" type="text/css" href="/src/css/login/login.css">
@@ -27,7 +38,7 @@
 					<form id="form_registro">
 
 						<div class="form-outline mb-4">
-							<input type="email" id="nombre_usuario" class="form-control form-control-lg"
+							<input type="text" id="nombre_usuario" class="form-control form-control-lg"
 							  placeholder="Ingrese su nombre de usuario" 
 							  autocomplete="off"/>
 							<label class="form-label" for="nombre_usuario">Nombre de usuario</label>
@@ -52,7 +63,7 @@
 						<input type="password" id="password_usuario" class="form-control form-control-lg"
 						  placeholder="Ingresa una contraseña" 
 						  autocomplete="off"/>
-						<label class="label-password"><i class="bi bi-eye"></i></label>
+						<label class="label-password" id="reveal_password"><i class="bi bi-eye" id="icon_password"></i></label>
 						<label class="form-label" for="password_usuario">Contraseña</label>
 					  </div>
 
@@ -61,15 +72,14 @@
 						  <label class="input-group-text" for="pais_usuario">Seleccione un país</label>
 						</div>
 						<select class="custom-select" id="pais_usuario">
-						  <option selected value="0"></option>
+						  <option selected value='null' id="fist_option"></option>
 						</select>
 					  </div>
 
 					  <div class="text-center text-lg-start mt-4 pt-2">
-						<a href="/front/index.html" class="btn btn-success btn-lg"
-						  style="padding-left: 2.5rem; padding-right: 2.5rem;">
-						  Registrarse
-						</a>
+						<button type="submit" class="btn btn-success btn-lg" style="padding-left: 2.5rem; padding-right: 2.5rem;">
+							Registrarse
+						</button>
 					  </div>
 			
 					</form>
@@ -81,13 +91,8 @@
 		</section>
 	</div>
 
-
-	<footer>
-		<p>Contacto profesional: <a href="mailto:nibyminson@gmail.com" style="color: #58a6ff; text-decoration: none;">nibyminson@gmail.com</a></p>
-		<p>&copy; 2025 Pixel y Tinta - Todos los derechos reservados</p>
-	</footer>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-
+	<script src="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/alertify.min.js"></script>
+	<script src="/src/js/sign_up/sign_up.js"></script>
 </body>
 </html>
