@@ -1,49 +1,269 @@
-/*  transition: all 0.3s ease-in-out;
-    transform: scale(1.0);
-    transition: background-color 0.3s ease;
+/* Estilos generales */
+body {
+    background-color: #0d1117; /* Fondo oscuro similar a GitHub */
+    color: #c9d1d9; /* Color de texto principal */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+}
+
+/* Navbar */
+.navbar {
+    background-color: #161b22; /* Fondo oscuro para la barra de navegación */
+    border-bottom: 1px solid #30363d; /* Borde inferior sutil */
+    padding: 1rem 0;
+}
+
+.navbar-brand {
+    color: #c9d1d9 !important; /* Color del texto del brand */
+    font-weight: bold;
     transition: all 0.3s ease-in-out;
-    transform: scale(1.3);
-    PARA LAS ANIMACIONES    
-*/
-footer {
-    background-color: #161b22;
+}
+
+.navbar-brand:hover {
+    color: #58a6ff !important; /* Color azul de GitHub al hacer hover */
+    transform: scale(1.05);
+}
+
+#nombreUsuario {
+    color: #8b949e; /* Color de texto secundario */
+    font-weight: bold;
+}
+
+/* Botones */
+.btn {
+    transition: all 0.3s ease-in-out;
+}
+
+.btn-outline-light {
+    border-color: #30363d; /* Borde sutil */
+    color: #c9d1d9; /* Color de texto */
+}
+
+.btn-outline-light:hover {
+    background-color: #30363d; /* Fondo al hacer hover */
     color: #c9d1d9;
-    text-align: center;
+    transform: scale(1.05);
+}
+
+.btn-success {
+    background-color: #238636; /* Verde de GitHub */
+    border: none;
+    color: #c9d1d9;
+    transition: all 0.3s ease-in-out;
+}
+
+.btn-success:hover {
+    background-color: #2ea043; /* Verde más claro al hacer hover */
+    transform: scale(1.05);
+}
+
+/* Tarjetas */
+.card {
+    background-color: #161b22; /* Fondo oscuro para tarjetas */
+    border: 1px solid #30363d; /* Borde sutil */
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.card:hover {
+    transform: translateY(-5px); /* Efecto de levantar la tarjeta */
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); /* Sombra al hacer hover */
+}
+
+/* Formularios */
+.form-control {
+    background-color: #161b22; /* Fondo oscuro para inputs */
+    border: 1px solid #30363d; /* Borde sutil */
+    color: #c9d1d9; /* Color de texto */
+    transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.form-control::placeholder {
+    color: #8b949e; /* Color de placeholder */
+}
+
+.form-control:focus {
+    background-color: #161b22; /* Mantener el fondo oscuro al enfocar */
+    border-color: #58a6ff; /* Borde azul al enfocar */
+    color: #c9d1d9; /* Color de texto al enfocar */
+    box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.1); /* Sombra sutil al enfocar */
+    outline: none; /* Eliminar el outline predeterminado */
+}
+
+textarea.form-control {
+    resize: vertical; /* Permitir redimensionar verticalmente */
+    min-height: 100px; /* Altura mínima */
+}
+
+input[type="file"].form-control {
+    padding: 0.375rem 0.75rem; /* Ajustar padding */
+}
+
+input[type="file"].form-control:focus {
+    border-color: #58a6ff; /* Borde azul al enfocar */
+    box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.1); /* Sombra sutil al enfocar */
+}
+
+/* Footer */
+footer {
+    background-color: #161b22; /* Fondo oscuro */
+    color: #c9d1d9; /* Color de texto */
+    border-top: 1px solid #30363d; /* Borde superior sutil */
     padding: 2rem;
     margin-top: 2rem;
-    border-top: 1px solid #30363d;
+    transition: background-color 0.3s ease-in-out;
 }
-body {
-    background-color: #0d1117;
-    color: #c9d1d9;
+
+footer:hover {
+    background-color: #1f242c; /* Cambio de color al hacer hover */
 }
-.navbar, footer {
-    background-color: #161b22;
-    border-bottom: 1px solid #30363d;
+
+footer a {
+    color: #58a6ff; /* Color de enlace */
+    text-decoration: none;
+    transition: color 0.3s ease-in-out;
 }
-.card {
-    background-color: #161b22;
-    border: 1px solid #30363d;
+
+footer a:hover {
+    color: #79c0ff; /* Color de enlace al hacer hover */
 }
-.form-control, .btn, .navbar-brand, a {
-    color: #c9d1d9;
+
+/* Animaciones avanzadas */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
-.form-control::placeholder {
-    color: #8b949e;
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
 }
-.btn-success {
-    background-color: #238636;
+
+#publicaciones {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Estilos para el botón "Publicar" */
+#hagaloPapi {
+    background-color: #238636; /* Verde de GitHub */
     border: none;
+    color: #c9d1d9;
+    transition: all 0.3s ease-in-out;
+    position: relative;
+    overflow: hidden;
 }
-.btn-success:hover {
-    background-color: #2ea043;
+
+#hagaloPapi:hover {
+    background-color: #2ea043; /* Verde más claro al hacer hover */
+    transform: scale(1.05); /* Efecto de escala al hacer hover */
 }
-a:hover {
-    color: #58a6ff;
+
+#hagaloPapi::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 300%;
+    height: 300%;
+    background-color: rgba(255, 255, 255, 0.1); /* Efecto de onda */
+    border-radius: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+    opacity: 0;
 }
-.text-muted {
-    color: #8b949e !important;
+
+#hagaloPapi:active::after {
+    transform: translate(-50%, -50%) scale(1); /* Efecto de onda al hacer clic */
+    opacity: 1;
 }
-.form-label {
-    font-weight: bold;
+
+/* Animación de carga para el botón "Publicar" */
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+#hagaloPapi.loading {
+    pointer-events: none; /* Deshabilitar clics durante la carga */
+    background-color: #2ea043; /* Cambiar color durante la carga */
+}
+
+#hagaloPapi.loading::after {
+    content: '';
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-top-color: #c9d1d9;
+    border-radius: 50%;
+    animation: spin 1s linear infinite; /* Animación de carga */
+    margin-left: 10px;
+    vertical-align: middle;
+}
+
+/* Responsividad */
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .navbar-brand {
+        margin-bottom: 1rem;
+    }
+
+    .navbar div {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .btn {
+        width: 48%;
+    }
+
+    .card {
+        margin-bottom: 1rem;
+    }
+
+    footer {
+        padding: 1rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .navbar div {
+        flex-direction: column;
+    }
+
+    .btn {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+
+    .navbar-brand {
+        font-size: 1.5rem;
+    }
+
+    #nombreUsuario {
+        font-size: 1rem;
+    }
+}
+.text-white{
+    color: white !important;
 }
