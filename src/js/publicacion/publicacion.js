@@ -42,7 +42,8 @@ async function cargarTabla() {
             traeImagen = true;
         }
     } catch (error) {
-        console.error("Error al obtener información del usuario:", error);
+        alertify.error('No existe el usuario');
+        //console.error("Error al obtener información del usuario:", error);
     }
 
     fetch(api + "listar_publicacion")
@@ -110,12 +111,13 @@ function eliminarPublicacion(id) {
         })
         .then((res) => res.json())
         .then((res) => {
-            alert("Publicación eliminada correctamente");
+            alertify.success('Publicacion borrada exitosamente');
             limpiarTabla();
             cargarTabla();
         })
         .catch((err) => {
-            console.error("Error al eliminar la publicación:", err);
+            alertify.error('Error al borrar la publicacion: ',err);
+            //console.error("Error al eliminar la publicación:", err);
         });
     }
 }
@@ -128,7 +130,7 @@ function crearPublicacion(e) {
     const imagen_publicacion = document.getElementById("imagen").value;
 
     if (!nombre_publicacion || !contenido_publicacion) {
-        alert("Por favor, completa todos los campos obligatorios.");
+        alertify.error('Llena todos los campos');
         return;
     }
 
@@ -147,15 +149,16 @@ function crearPublicacion(e) {
     .then((res) => res.json())
     .then((res) => {
         if (res.completado) {
-            alert(res.mensaje);
+            //alert(res.mensaje);
+            alertify.success('Publicación creada');
             limpiarTabla();
             cargarTabla();
         } else {
-            alert("Error: " + res.mensaje); 
+            alertify.error('No se pudo completar la acción: ',res.mensaje);
         }
     })
     .catch((err) => {
-        console.error("Error al crear la publicación:", err);
+        alertify.error('Error al crear la publicacion: ',err);
     });
 }
 
