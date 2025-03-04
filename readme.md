@@ -1,14 +1,14 @@
 
 ### 🛠️| NOTAS DEL PROYECTO
 
-**1.** Abrir powershell como administrador.
-**2.** Set-ExecutionPolicy RemoteSigned -Scope CurrentUser.
+##### **1.** Abrir powershell como administrador.
+##### **2.** Set-ExecutionPolicy RemoteSigned -Scope CurrentUser.
 
 ### 🏗️| ARQUITECTURA
 
-**1.** Usaremos 2 arquitecturas: orientadas aservicios (API REST) para el backend.
-**2.** Internamente usaremos MVC (las vistas se remplazan por las rutas).
-**3.** Usaremos Bootstrap 5.
+##### Usaremos arquitecturas orientadas a servicios (API REST) para el backend.
+##### Internamente usaremos MVC (las vistas se remplazan por las rutas).
+##### Usaremos Bootstrap 5 y CSS clásico.
 
 ### 🎸| PAQUETES
 
