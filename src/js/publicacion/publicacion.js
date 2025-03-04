@@ -42,7 +42,7 @@ async function cargarTabla() {
             traeImagen = true;
         }
     } catch (error) {
-        alertify.error('No existe el usuario');
+        //alertify.error('No existe el usuario');
         //console.error("Error al obtener información del usuario:", error);
     }
 
@@ -104,22 +104,14 @@ async function cargarTabla() {
 }
 
 function eliminarPublicacion(id) {
-    const confirmar = confirm("¿Estás seguro de eliminar esta publicación?");
-    if (confirmar) {
-        fetch(api + `borrar_publicacion/${id}`, {
-            method: "DELETE"
-        })
+      alertify.confirm("¿Estás seguro de eliminar esta publicación?",
+      function(e){fetch(api + `borrar_publicacion/${id}`, {method: "DELETE"})
         .then((res) => res.json())
-        .then((res) => {
-            alertify.success('Publicacion borrada exitosamente');
+        .then((res) => {alertify.success('Publicacion borrada exitosamente');
             limpiarTabla();
-            cargarTabla();
-        })
-        .catch((err) => {
-            alertify.error('Error al borrar la publicacion: ',err);
-            //console.error("Error al eliminar la publicación:", err);
-        });
-    }
+            cargarTabla();})
+        .catch((err) => {alertify.error('Error al borrar la publicacion: ',err);});},
+      function(e){});
 }
 
 function crearPublicacion(e) {
@@ -153,6 +145,9 @@ function crearPublicacion(e) {
             alertify.success('Publicación creada');
             limpiarTabla();
             cargarTabla();
+            nombre_publicacion.innerHTML="";
+            contenido_publicacion.innerHTML="";
+            imagen_publicacion.innerHTML="";
         } else {
             alertify.error('No se pudo completar la acción: ',res.mensaje);
         }
