@@ -18,6 +18,7 @@ router.put("/usuarios/editar_usuario/:id",usuarios.editar_usuario)
 router.delete("/usuarios/eliminar_usuario/:id",usuarios.eliminar_usuario)
 router.post("/usuarios/rec_pass/:correo_usuario",usuarios.recuperar_password)
 router.post("/usuarios/log_in",usuarios.log_in)
+router.post("/usuarios/token_decode",usuarios.decode)
 router.get("/usuarios/verificar_correo/:correo_usuario",usuarios.verificar_correo)
 
 module.exports  = router

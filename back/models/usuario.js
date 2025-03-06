@@ -21,6 +21,10 @@ const usuario_schema = Schema(
           type: String,
           required: true,
         },
+        img_usuario: {
+          type: String,
+          required: true,
+        },
         password_usuario: {
           type: String,
           required: true,

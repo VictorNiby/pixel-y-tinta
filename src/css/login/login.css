@@ -60,23 +60,6 @@ section{
   padding: 20px;
 }
 
-.input-group-text{
-  background-color: #30363d !important;
-  color: white !important;
-  transition: background .2s ease-in-out;
-}
-
-.input-group-text:hover{
-  cursor: pointer;
-  background-color: rgb(33, 136, 253) !important; 
-}
-
-select{
-  border: none;
-  background-color: #30363d !important;
-  color: white !important;
-}
-
 @media (max-width: 450px) {
   .h-custom {
     height: 100%;

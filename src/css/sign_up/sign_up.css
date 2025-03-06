@@ -1,57 +1,20 @@
-body {
-    background-position: center;  
-    background-size: cover;
-    scrollbar-width: 50px;
-}
-
-div.container{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
-.card{
-    width: 50%;
-    padding: 40px;
-    border-radius: 30px;
-    background-color: #2e2e2e;
-}
-
-.card-body *{
-    overflow: hidden !important;
-}
-
-label{
-    color: white !important;
-}
-.form-floating > input + label:after, .form-floating > select + label:after{
-    text-decoration-color: white;
-    background: none !important;
-}
-
 select{
-    border: none !important;
-    color: white !important;
-    background-color: #4b4b4b !important;
-}
-
-input{
-    border: none !important;
-    color: white !important;
-    background-color: #4b4b4b !important;
-}
-  
-button[type=submit]{
-    width: 100%;
     border: none;
-    background-color: #28993e;
+    background-color: #30363d !important;
+    color: white !important;
   }
   
-button[type=submit]:hover{
-background-color: #0d6d20;
+.input-group-text{
+    background-color: #30363d !important;
+    color: white !important;
+    transition: background .2s ease-in-out;
 }
-
+  
+.input-group-text:hover{
+    cursor: pointer;
+    background-color: rgb(33, 136, 253) !important; 
+}
+  
 @media screen and (max-width:780px) {
     .card{
         padding: 20px;

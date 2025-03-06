@@ -65,10 +65,14 @@ const listar_por_id  = async (req,resp) => {
 }
 
 const insertar_usuario = async (req,resp)=>{
+
+    const default_profile = "/back/uploads/img/diegofilhodaputa.png"
+
     let datos = {
         nombre_usuario:req.body.nombre_usuario,
         fecha_nacimiento:req.body.fecha_nacimiento,
         correo_usuario:req.body.correo_usuario,
+        img_usuario: (req.body.img_usuario != "" ? req.body.img_usuario : default_profile) || default_profile,
         password_usuario:bcrypt.hashSync(req.body.password_usuario,10),
         pais_usuario:req.body.pais_usuario
     }
@@ -217,8 +221,11 @@ const log_in = async (req,resp)=>{
             if (bcrypt.compareSync(data.password_usuario, password_hash)) {
 
                 const token = jwt.sign({
-                    userID :usuario_existe._id,
-                    isAdmin: usuario_existe.is_admin
+                    id_usuario :usuario_existe._id,
+                    correo_usuario :usuario_existe.correo_usuario,
+                    nombre_usuario :usuario_existe.nombre_usuario,
+                    fecha_nacimiento :usuario_existe.fecha_nacimiento,
+                    is_admin: usuario_existe.is_admin
                 },
                 "seCreTo",
                 {expiresIn:"30m"}
@@ -248,6 +255,31 @@ const log_in = async (req,resp)=>{
         })
     }
 
+}
+
+const decode = async(req,resp)=>{
+    const payload = {
+        token:req.body.token,
+    }
+
+    console.log(payload);
+    
+
+    const secret = "seCreTo"
+
+    try {
+        const decode = jwt.verify(payload.token,secret)
+
+        resp.status(200).send({
+            msg:"Token verificado",
+            data:decode
+        })
+        
+    } catch (error) {
+        resp.status(400).send({
+            msg:"Ocurrió un error: "+error
+        })
+    }
 }
 
 const verificar_correo = async(req,resp)=>{
@@ -285,5 +317,6 @@ module.exports = {
     eliminar_usuario,
     recuperar_password,
     log_in,
+    decode,
     verificar_correo
 }

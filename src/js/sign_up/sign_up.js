@@ -34,6 +34,33 @@ function Fill_Select_Country() {
     })
 }
 
+const log_in = async(object_data)=>{
+    const request = await fetch(api_url+'log_in',{
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body:JSON.stringify(object_data)
+    }).then(res => res.json())
+    
+    request.completado ?  alertify.success(`${request.mensaje}`) : alertify.error(`${request.mensaje}`)
+
+    if (request.completado) {
+        const token_decode = await fetch(api_url+"token_decode",{
+            method:"POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body:JSON.stringify({
+                token:request.token
+            })
+        }).then(res => res.json())
+
+        sessionStorage.setItem('sesion_usuario',JSON.stringify(token_decode.data))
+        
+    }
+}
+
 window.addEventListener('load',()=>{
 
     Fill_Select_Country()
@@ -87,13 +114,21 @@ window.addEventListener('load',()=>{
             body:JSON.stringify(object_data)
         }).then(res => res.json())
 
-        request.completado ?  alertify.success(`${request.mensaje}`) : alertify.error(`${request.mensaje}`)
-
-        if (request.completado) {
-            setTimeout(() => {
-                window.location.replace("http://127.0.0.1:5500/front/login/login.html")
-            }, 500);
+        switch (request.completado) {
+            case true:
+                const obj_login = {
+                    correo_usuario:correo_usuario,
+                    password_usuario:password_usuario,
+                }
+                await log_in(obj_login)
+                window.location.replace('/front/upload_pfp/upload_pfp.html')
+                break;
+        
+            default:
+                alertify.error(`${request.mensaje}`)
+                break;
         }
+
 
     })
 })
