@@ -68,6 +68,7 @@
             <button type="" id="hagaloPapi" class="btn btn-success w-100">
               Publicar
             </button>
+
           </form>
         </div>
       </section>
@@ -107,6 +108,35 @@
                 </div>
             </div>
         </div>
+
+                <!-- Modal para editar publicaciones -->
+                <div class="modal fade" id="publicacionModal" tabindex="-1" aria-labelledby="publicacionModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                      <div class="modal-content bg-dark text-light">
+                          <div class="modal-header">
+                              <h5 class="modal-title" id="publicacionModalLabel">Editar Publicacion</h5>
+                              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                          </div>
+                          <div class="modal-body">
+                              <form id="formPublicacion">
+                                <div class="mb-3">
+                                  <label for="tituloPublicacion" class="form-label">Titulo</label>
+                                  <textarea class="form-control" id="tituloPublicacion" rows="1" required></textarea>
+                                </div>
+
+                                  <div class="mb-3">
+                                      <label for="contenidoPublicacion" class="form-label">Contenido</label>
+                                      <textarea class="form-control" id="contenidoPublicacion" rows="2" required></textarea>
+                                  </div>
+                              </form>
+                          </div>
+                          <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                              <button type="button" class="btn btn-success" id="btnActualizarPublicacion">Actualizar Publicacion</button>
+                          </div>
+                      </div>
+                  </div>
+              </div>
     </div>
 
     <script src="../src/js/publicacion/publicacion.js"></script>
