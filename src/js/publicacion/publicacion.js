@@ -119,9 +119,7 @@ async function cargarTabla() {
                                     <p class="mb-0 text-light fs-6">${
                                       comentario.comentario_usuario
                                     }</p>
-                                                                            <small class="text-light">${calcularTiempoTranscurrido(
-                                                                              comentario.fecha_publicacion
-                                                                            )}</small>
+                                    <small class="text-light">${calcularTiempoTranscurrido(comentario.fecha_publicacion)}</small>
                                 </div>
                             </div>
                         </div>
@@ -170,14 +168,19 @@ async function cargarTabla() {
                                 ${
                                   numComentarios == 0
                                     ? ""
-                                    : `<button class="btn btn-outline-light btn-toggle-comentarios me-2" data-id="${publicacion._id}">
+                                    : `
+                                    <button class="btn btn-outline-light btn-toggle-comentarios me-2" data-id="${publicacion._id}">
                                     <i class="bi bi-chevron-down"></i>
-                                </button>`
+                                    </button>`
                                 }
 
-                                <button class="btn btn-outline-light me-2"><i class="bi bi-heart"></i> <span>${
-                                  publicacion.likes
-                                }</span></button>
+                                    <button type="button" class="btn btn-outline-light position-relative me-2" data-id="">
+                                    <i class="bi bi-heart"></i>
+                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary">
+                                        ${publicacion.likes}
+                                        <span class="visually-hidden">número de likes</span>
+                                    </span>
+                                    </button>
                 
                                 ${
                                   esAdmin
@@ -256,7 +259,6 @@ function limpiarTabla() {
   contenedor.innerHTML = "";
 }
 document.addEventListener("click", (e) => {
-  e.preventDefault();
   if (e.target.closest(".modalComentario")) {
     const publicacionId = e.target
       .closest(".modalComentario")
@@ -289,7 +291,7 @@ document
     }
     try {
       const respuesta = await fetch(
-        `http://127.0.0.1:4000/api/publicacion/crear_comentario/${publicacionId}`,
+        api + `crear_comentario/${publicacionId}`,
         {
           method: "POST",
           headers: {
@@ -319,7 +321,6 @@ document
   });
 document.addEventListener("DOMContentLoaded", cargarTabla);
 document.addEventListener("click", (e) => {
-  e.preventDefault();
   if (e.target.closest(".btn-toggle-comentarios")) {
     const publicacionId = e.target.closest("button").getAttribute("data-id");
     const comentariosContainer = document.getElementById(
@@ -342,7 +343,7 @@ function eliminarComentario(id, parametro) {
     "¿Estás seguro de eliminar este comentario?",
     function (e) {
       fetch(
-        `http://127.0.0.1:4000/api/publicacion/${id}/borrar_comentario/${parametro}`,
+        api + `${id}/borrar_comentario/${parametro}`,
         { method: "DELETE" }
       )
         .then((res) => res.json())
@@ -355,6 +356,5 @@ function eliminarComentario(id, parametro) {
           alertify.error("Error al borrar el comentario: " + err);
         });
     },
-    function (e) {}
   );
 }
