@@ -1,0 +1,32 @@
+import java.net.URL;
+import java.net.HttpURLConnection;
+import java.util.Scanner;
+
+            // URL de la API de OpenWeatherMap RONALDINHO SOCCER 64
+            URL api = new URL("https://api.openweathermap.org/data/2.5/weather?q=Cartago&appid=046e032e46cdaca706906f490500437f");
+            HttpURLConnection con = (HttpURLConnection) api.openConnection();
+            con.setRequestMethod("GET");
+            int responseCode = con.getResponseCode();
+            
+            
+            if(responseCode == 200)
+            {
+                StringBuilder informationstring= new StringBuilder();
+                Scanner sc=new Scanner(api.openStream());
+                while(sc.hasNext()){
+                informationstring.append(sc.nextLine());
+                }
+                System.out.println();
+            }else
+            {
+             System.out.println("Error"+ responseCode);
+            }
+            
+            
+            
+            
+            
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
