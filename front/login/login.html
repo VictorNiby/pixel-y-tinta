@@ -1,85 +1,44 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-	<title>Inicio de Sesión</title>
-   <!--Made with love by Mutiullah Samim -->
-	<!--Bootsrap 4 CDN-->
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pixel y Tinta</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-
-	<!-- CSS -->
-	<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/css/alertify.min.css"/>
-	<!-- Default theme -->
-	<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/css/themes/default.min.css"/>
-	<!-- Semantic UI theme -->
-	<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/css/themes/semantic.min.css"/>
-	<!-- Bootstrap theme -->
-	<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/css/themes/bootstrap.min.css"/>
-
-	<!--Custom styles-->
-	<link rel="stylesheet" type="text/css" href="/src/css/login/login.css">
+	<link rel="stylesheet" href="/src/css/login/login.css">
+	        <!-- Cargar AlertifyJS desde CDN -->
+			<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/css/alertify.min.css" />
+			<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/css/themes/semantic.min.css" />
+			<script src="https://cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/alertify.min.js"></script>
+				<link rel="stylesheet" href="/src/css/login/login.css">
+		
+			<script type="text/javascript">
+				// Configuración personalizada para AlertifyJS
+				alertify.defaults.transition = "zoom";
+				alertify.defaults.theme.ok = "btn btn-success";  // Botón OK: verde (Bootstrap)
+				alertify.defaults.theme.cancel = "btn btn-dark";  // Botón Cancel: negro (Bootstrap)
+			</script>
 </head>
 <body>
-
-	<div class="container-fluid h-custom">
-		<section class="vh-100 mb-3">
-			<div class="row d-flex justify-content-center align-items-center h-100">
-
-				<div class="col-md-9 col-lg-6 col-xl-5">
-					<img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp" class="img-fluid"
-					  alt="
-					  Sample image">
-				</div>
-
-				<div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
-					<form id="form_login">
-					  <!-- Email input -->
-					  <div class="form-outline mb-4">
-						<input type="email" id="correo_usuario" class="form-control form-control-lg"
-						  placeholder="Ingresa un correo válido" 
-						  autocomplete="off"/>
-						<label class="form-label" for="correo_usuario">Correo electrónico</label>
-					  </div>
-			
-					  <!-- Password input -->
-					  <div class="form-outline mb-3 password-container">
-						<input type="password" id="password_usuario" class="form-control form-control-lg"
-						  placeholder="Ingresa una contraseña" />
-						<label class="label-password" id="reveal_password"><i class="bi bi-eye" id="icon_password"></i></label>
-						<label class="form-label" for="password_usuario">Contraseña</label>
-					  </div>
-
-					  <div class="text-center text-lg-start mt-4 pt-2">
-						<button type="submit" class="btn btn-success" style="padding-left: 2.5rem; padding-right: 2.5rem;">
-							Iniciar Sesión
-						</button>
-					  </div>
-
-  
-					  <div class="divider d-flex align-items-center my-4">
-						  <p class="text-center fw-bold mx-3 mb-0">O</p>
-					  </div>
-			
-					  <div class="text-center text-lg-start mt-4 pt-2">
-						<p class="small fw-bold mt-2 pt-1 mb-0">
-							¿No tienes una cuenta?
-							<a href="/front/sign_up/sign_up.html"
-							class="link-signup">Registrate</a>
-						</p>
-					  </div>
-			
-					</form>
-				</div>
-				
-			</div>
-
-
-		</section>
-
-	</div>
-	
-	<script src="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/alertify.min.js"></script>
+    <div class="container">
+        <h2>Iniciar Sesión</h2>
+        <form id="form_login">
+            <div class="form-group">
+                <label for="correo_usuario">Correo Electrónico</label>
+                <input type="email" id="correo_usuario" placeholder="Ingresa tu correo" required>
+            </div>
+            <div class="form-group">
+                <label for="password_usuario">Contraseña</label>
+                <div class="password-container">
+                    <input type="password" id="password_usuario" placeholder="Ingresa tu contraseña" required>
+                    <i class="bi bi-eye icon_password" id="reveal_password"></i>
+                </div>
+            </div>
+            <button type="submit">Entrar</button>
+        </form>
+        <p class="link">¿No tienes cuenta? <a href="../sign_up/sign_up.html">Regístrate aquí</a></p>
+    </div>
 	<script src="/src/js/log_in/log_in.js"></script>
 </body>
 </html>

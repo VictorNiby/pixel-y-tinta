@@ -6,13 +6,13 @@ document.addEventListener('DOMContentLoaded',()=>{
         if (document.querySelector('#password_usuario').type == "password") {
             document.querySelector('#password_usuario').type = "text"
 
-            document.querySelector('#icon_password').classList.remove("bi-eye")
-            document.querySelector('#icon_password').classList.add("bi-eye-slash")
+            document.querySelector('.icon_password').classList.remove("bi-eye")
+            document.querySelector('.icon_password').classList.add("bi-eye-slash")
         }else{
             document.querySelector('#password_usuario').type = "password"
 
-            document.querySelector('#icon_password').classList.remove("bi-eye-slash")
-            document.querySelector('#icon_password').classList.add("bi-eye")
+            document.querySelector('.icon_password').classList.remove("bi-eye-slash")
+            document.querySelector('.icon_password').classList.add("bi-eye")
         }
     })
 
@@ -42,4 +42,4 @@ document.addEventListener('DOMContentLoaded',()=>{
         }
 
     })
-})
+ })
