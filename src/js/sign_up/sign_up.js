@@ -25,6 +25,15 @@ const paises = [
     "Yibuti", "Zambia", "Zimbabue"
 ];
 
+//PARA EL CALENDARIO, USTED LO BORRA Y YO LE BORRO LA VIDA
+flatpickr("#fecha_usuario", {
+    dateFormat: "Y-m-d",
+    altInput: true,
+    altFormat: "F j, Y",
+    locale: "es",
+    theme: "material_green"
+});
+
 function Fill_Select_Country() {
     paises.forEach((data)=>{
         const option = document.createElement('option')
@@ -62,6 +71,7 @@ const log_in = async(object_data)=>{
 }
 
 window.addEventListener('load',()=>{
+    
 
     Fill_Select_Country()
     select_pais_usuario.addEventListener('click',()=>{
@@ -73,13 +83,13 @@ window.addEventListener('load',()=>{
         if (document.querySelector('#password_usuario').type == "password") {
             document.querySelector('#password_usuario').type = "text"
 
-            document.querySelector('#icon_password').classList.remove("bi-eye")
-            document.querySelector('#icon_password').classList.add("bi-eye-slash")
+            document.querySelector('.icon_password').classList.remove("bi-eye")
+            document.querySelector('.icon_password').classList.add("bi-eye-slash")
         }else{
             document.querySelector('#password_usuario').type = "password"
 
-            document.querySelector('#icon_password').classList.remove("bi-eye-slash")
-            document.querySelector('#icon_password').classList.add("bi-eye")
+            document.querySelector('.icon_password').classList.remove("bi-eye-slash")
+            document.querySelector('.icon_password').classList.add("bi-eye")
         }
     })
 

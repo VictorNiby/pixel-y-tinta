@@ -1,24 +1,146 @@
-select{
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #0d1117, #161b22);
+    font-family: 'Poppins', sans-serif;
+    padding: 1rem;
+}
+
+.container {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    backdrop-filter: blur(25px);
+    padding: 2rem;
+    width: 100%;
+    max-width: 750px; /* Contenedor más ancho */
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+h2 {
+    text-align: center;
+    color: #c9d1d9;
+    margin-bottom: 1.5rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+
+.form-group-row {
+    display: flex;
+    gap: 1rem;
+}
+
+.form-group-row .form-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    color: #c9d1d9;
+    margin-bottom: 0.5rem;
+    flex: 1;
+    min-width: 120px; /* Ancho fijo para los labels */
+}
+
+input[type="text"],
+input[type="date"],
+input[type="email"],
+input[type="password"],
+select {
+    width: 100%;
+    padding: 0.75rem;
     border: none;
-    background-color: #30363d !important;
-    color: white !important;
-  }
-  
-.input-group-text{
-    background-color: #30363d !important;
-    color: white !important;
-    transition: background .2s ease-in-out;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.15);
+    color: #c9d1d9;
+    outline: none;
+    border: 1px solid rgba(255, 255, 255, 0.3);
 }
-  
-.input-group-text:hover{
+
+input::placeholder, select {
+    color: #8b949e;
+}
+
+.password-container {
+    position: relative;
+}
+
+.password-container i {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
     cursor: pointer;
-    background-color: rgb(33, 136, 253) !important; 
+    font-size: 1.2rem;
+    color: #8b949e;
 }
-  
-@media screen and (max-width:780px) {
-    .card{
-        padding: 20px;
-        width: 100%;
+
+button {
+    width: 100%;
+    padding: 0.75rem;
+    background: rgba(35, 134, 54, 0.8);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    cursor: pointer;
+    transform: scale(1);
+    transition: transform 0.3s ease-in-out;
+}
+
+button:hover {
+    background: rgba(46, 160, 67, 0.9);
+    transform: scale(1.03);
+}
+
+.link {
+    text-align: center;
+    margin-top: 1rem;
+    color: #8b949e;
+}
+
+.link a {
+    color: #58a6ff;
+    text-decoration: none; /* Quitamos el subrayado por defecto */
+    font-weight: 600;
+}
+
+.link a:hover {
+    text-decoration: underline; /* Subrayado al pasar el mouse */
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 1.5rem;
+        max-width: 100%; /* Ajustamos el ancho en móviles */
     }
 
+    h2 {
+        font-size: 1.5rem;
+    }
+
+    label, input, button, .link {
+        font-size: 0.9rem;
+    }
+
+    .form-group-row {
+        flex-direction: column;
+        gap: 0;
+    }
+
+    label {
+        min-width: auto; /* Quitamos el ancho fijo en móviles */
+    }
 }
