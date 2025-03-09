@@ -8,6 +8,20 @@
 
 const express = require('express')
 const router = express.Router()
+const multer = require('multer')
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, "../back/uploads/pfp/");
+    },
+    //estructura para denominar los archivos
+    filename: (req, file, cb) => {
+        //armamos el nombre del archivo
+        cb(null, Date.now() + "-" + file.originalname);
+    },
+});
+// instancia del multer con la configuracion de almacenamiento y nombre de archivo
+const uploads = multer({ storage });
 
 const usuarios = require('../controllers/usuario.js')
 
@@ -20,5 +34,7 @@ router.post("/usuarios/rec_pass/:correo_usuario",usuarios.recuperar_password)
 router.post("/usuarios/log_in",usuarios.log_in)
 router.post("/usuarios/token_decode",usuarios.decode)
 router.get("/usuarios/verificar_correo/:correo_usuario",usuarios.verificar_correo)
+router.post("/usuarios/subir_imagen/",uploads.single("pfp"),usuarios.subir_imagen)
+router.get("/usuarios/pfp_route/:file", usuarios.pfp_route);
 
 module.exports  = router

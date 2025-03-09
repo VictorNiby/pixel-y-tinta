@@ -22,6 +22,8 @@
 
 let usuario = require('../models/usuario.js')
 let bcrypt = require('bcryptjs')
+const fs = require('fs')
+const path = require('path')
 
 const jwt = require('jsonwebtoken')
 
@@ -66,7 +68,8 @@ const listar_por_id  = async (req,resp) => {
 
 const insertar_usuario = async (req,resp)=>{
 
-    const default_profile = "/back/uploads/img/diegofilhodaputa.png"
+    const default_profile = "diegofilhodaputa.png"
+    
 
     let datos = {
         nombre_usuario:req.body.nombre_usuario,
@@ -99,8 +102,7 @@ const insertar_usuario = async (req,resp)=>{
         }
 
     } catch (error) {
-        console.log(error);
-        
+
         return resp.send({
             completado:false,
             mensaje:`Faltan datos`
@@ -262,9 +264,6 @@ const decode = async(req,resp)=>{
         token:req.body.token,
     }
 
-    console.log(payload);
-    
-
     const secret = "seCreTo"
 
     try {
@@ -309,6 +308,96 @@ const verificar_correo = async(req,resp)=>{
 
 }
 
+const subir_imagen = async (req, res) => {
+
+    try {
+      // Validar si se subió un archivo
+      if (!req.file) {
+        return res.status(400).json({
+          estado: false,
+          mensaje: "No se ha subido ninguna imagen",
+        });
+      }
+
+      
+      // validar la extension de la imagen
+      const { originalname, filename, path } = req.file;
+      const extension = originalname.split(".").pop().toLowerCase();
+
+      // Validar extensión de la imagen
+      const extensiones_validas = ["png", "jpg", "jpeg", "gif"];
+      if (!extensiones_validas.includes(extension)) {
+        // Eliminar archivo inválido
+        fs.unlink(path); 
+
+        return res.status(400).json({
+          estado: false,
+          mensaje: "Extensión de archivo no permitida",
+        });
+      }
+
+      const id_usuario = req.body.id
+
+      if (id_usuario == null) {
+        return res.status(400).json(
+            {
+                completado:false,
+                mensaje : "No se envío el id del usuario"
+            }
+        )
+      }
+
+      const usuario_actualizado = await usuario.findByIdAndUpdate(id_usuario, {
+        img_usuario: filename,
+      });
+
+      if (usuario_actualizado == null) {
+        return res.status(400).json(
+            {
+                completado:false,
+                mensaje : "No se encontró el usuario"
+            }
+        )
+      }
+
+      return await res.status(200).json({
+        completado: true,
+        mensaje: "Foto de perfil actualizada!"
+      });
+
+
+    } catch (error) {
+      return res.status(500).json({
+        completado: false,
+        mensaje: "Error al procesar la imagen"+error
+      });
+    }
+
+  };
+
+// retorna la ruta de la imagen
+const pfp_route = (req, res) => {
+    // Sacar el parametro de la url
+    const file = req.params.file;
+  
+    // Montar el path real de la imagen
+    const file_path = "./uploads/pfp/" + file;
+  
+    // Comprobar que existe
+    fs.stat(file_path, (error, exists) => {
+      if (!exists) {
+        return res.status(404).send({
+          completado: false,
+          msg: "Ocurrió un error: "+error,
+        });
+      }
+  
+      // Devolver un file
+      return res.sendFile(path.resolve(file_path));
+    });
+};
+
+
 module.exports = {
     listar_todos,
     listar_por_id,
@@ -318,5 +407,7 @@ module.exports = {
     recuperar_password,
     log_in,
     decode,
-    verificar_correo
+    verificar_correo,
+    subir_imagen,
+    pfp_route
 }

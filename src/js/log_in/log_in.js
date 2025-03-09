@@ -27,7 +27,7 @@ const log_in = async(object_data)=>{
         sessionStorage.setItem('sesion_usuario',JSON.stringify(token_decode.data))
         
         setTimeout(() => {
-            window.location.replace("http://127.0.0.1:5500/front/index.html")
+            window.location.replace("../index.html")
         }, 500);
     }
 }

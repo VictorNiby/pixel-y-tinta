@@ -52,8 +52,6 @@ const log_in = async(object_data)=>{
         body:JSON.stringify(object_data)
     }).then(res => res.json())
     
-    request.completado ?  alertify.success(`${request.mensaje}`) : alertify.error(`${request.mensaje}`)
-
     if (request.completado) {
         const token_decode = await fetch(api_url+"token_decode",{
             method:"POST",
@@ -124,21 +122,20 @@ window.addEventListener('load',()=>{
             body:JSON.stringify(object_data)
         }).then(res => res.json())
 
-        switch (request.completado) {
-            case true:
-                const obj_login = {
-                    correo_usuario:correo_usuario,
-                    password_usuario:password_usuario,
-                }
-                await log_in(obj_login)
-                window.location.replace('/front/upload_pfp/upload_pfp.html')
-                break;
-        
-            default:
-                alertify.error(`${request.mensaje}`)
-                break;
-        }
+        request.completado ?  alertify.success(`${request.mensaje}`) : alertify.error(`${request.mensaje}`)
 
+        if(request.completado){
+            const obj_login = {
+                correo_usuario:correo_usuario,
+                password_usuario:password_usuario,
+            }
+            await log_in(obj_login)
+
+            setTimeout(() => {
+                window.location.replace('/front/upload_pfp/upload_pfp.html')
+            }, 1000);
+            
+        }
 
     })
 })
