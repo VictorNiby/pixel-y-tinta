@@ -13,9 +13,13 @@ const publicacion_schema = Schema(
       type: String,
       required: true,
     },
-    creador_publicacion: {
+    id_creador: {
       type: String,
       required: true,
+    },
+    nombre_creador:{
+      type:String,
+      required:true,
     },
     contenido_publicacion: {
       type: String,
@@ -39,6 +43,10 @@ const publicacion_schema = Schema(
     },
     comentarios: [
       {
+        id_usuario :{
+          type:String,
+          required:true
+        },
         nombre_usuario: {
           type: String,
           required: true,

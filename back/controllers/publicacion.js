@@ -29,12 +29,13 @@ const listar_publicacion = async (req, res) => {
 const crear_publicacion = async (req, res) => {
   const {
     nombre_publicacion,
-    creador_publicacion,
+    id_creador,
+    nombre_creador,
     contenido_publicacion,
     estado_publicacion,
     imagen_publicacion,
   } = req.body;
-  if (!nombre_publicacion || !creador_publicacion || !contenido_publicacion) {
+  if (!nombre_publicacion || !id_creador || !contenido_publicacion || !nombre_creador) {
     return res.status(400).json({
       completado: false,
       mensaje: "Faltan campos obligatorios.",
@@ -43,7 +44,8 @@ const crear_publicacion = async (req, res) => {
   try {
     const nueva_publicacion = new publicacion({
       nombre_publicacion,
-      creador_publicacion,
+      id_creador,
+      nombre_creador,
       contenido_publicacion,
       estado_publicacion: estado_publicacion || "publicado",
       imagen_publicacion,
@@ -136,12 +138,12 @@ const actualizar_publicacion_id = async (req, res) => {
 };
 const crear_comentario = async (req, res) => {
   const { id } = req.params;
-  const { nombre_usuario, comentario_usuario } = req.body;
+  const {id_usuario, nombre_usuario, comentario_usuario } = req.body;
 
-  if (!nombre_usuario || !comentario_usuario) {
+  if (!id_usuario || !nombre_usuario || !comentario_usuario) {
     return res.status(400).json({
       completado: false,
-      mensaje: "El nombre y el comentario son obligatorios.",
+      mensaje: "Faltan datos obligatorios.",
     });
   }
   try {
@@ -150,6 +152,7 @@ const crear_comentario = async (req, res) => {
       {
         $push: {
           comentarios: {
+            id_usuario,
             nombre_usuario,
             comentario_usuario,
           },

@@ -19,86 +19,43 @@ function calcularTiempoTranscurrido(fechaISO) {
     return `Hace ${segundos} ${segundos === 1 ? "segundo" : "segundos"}`;
   }
 }
-document
-  .getElementById("hagaloPapi")
-  .addEventListener("click", crearPublicacion);
-function crearPublicacion(e) {
-  e.preventDefault();
-  const nombre_publicacion = document.getElementById("titulo").value;
-  const creador_publicacion =
-    document.getElementById("nombreUsuario").textContent;
-  const contenido_publicacion = document.getElementById("contenido").value;
-  const imagen_publicacion = document.getElementById("imagen").value;
 
-  if (!nombre_publicacion || !contenido_publicacion) {
-    alertify.error("Llena todos los campos");
-    return;
+function LoadNavBar(data_user) {
+  const nombre_usuario = document.querySelector('#nombreUsuario')
+  const btn_signup = document.querySelector('#btn_signup')
+  const btn_login = document.querySelector('#btn_login')
+
+  nombre_usuario.textContent = data_user != null ? data_user.nombre_usuario : ''
+
+  if (data_user != null) {
+    btn_signup.style.display = "none"
+    btn_login.textContent = "Cerrar sesión"
+    btn_login.value = "cerrar_sesion"
   }
-  fetch(api + "crear_publicacion", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      nombre_publicacion,
-      creador_publicacion,
-      contenido_publicacion,
-      imagen_publicacion,
-    }),
-  })
-    .then((res) => res.json())
-    .then((res) => {
-      if (res.completado) {
-        alertify.success("Publicación creada");
-        limpiarTabla();
-        cargarTabla();
-      } else {
-        alertify.error("No se pudo completar la acción: ", res.mensaje);
-      }
-    })
-    .catch((err) => {
-      alertify.error("Error al crear la publicacion: ", err);
-    });
 }
-async function cargarTabla() {
-  const idUsuario = document
-    .getElementById("nombreUsuario")
-    .getAttribute("data-id");
-  let esAdmin = false;
-  let traeImagen = false;
-  try {
-    const respuesta = await fetch(apiUsuario + `listar_usuario/${idUsuario}`);
-    const datosUsuario = await respuesta.json();
-    if (datosUsuario.resultado.is_admin == true) {
-      esAdmin = true;
-    }
-    if (!datosUsuario.resultado.imagen_publicacion == undefined) {
-      traeImagen = true;
-    }
-  } catch (error) {
-    console.error("Error al obtener información del usuario:", error);
-  }
+
+async function cargarTabla(data_usuario) {
   fetch(api + "listar_publicacion")
     .then((res) => res.json())
     .then((res) => {
       const div = document.getElementById("publicaciones");
-      res.publicaciones.forEach((publicacion) => {
-        const tiempoTranscurrido = calcularTiempoTranscurrido(
-          publicacion.fecha_publicacion
-        );
-        const numComentarios = publicacion.comentarios
-          ? publicacion.comentarios.length
-          : 0;
-        const comentariosHTML =
-          publicacion.comentarios && publicacion.comentarios.length > 0
-            ? publicacion.comentarios
-                .map(
-                  (comentario) => `
+      res.publicaciones.forEach(async(publicacion) => {
+        const nombre_creador = publicacion.nombre_creador
+        const tiempoTranscurrido = calcularTiempoTranscurrido(publicacion.fecha_publicacion);
+        const numComentarios = publicacion.comentarios.length;
+        let comentariosHTML = ""
+
+        if (numComentarios > 0) {
+           publicacion.comentarios.map(async(comentario)=>{
+            // const img_usuario = await fetch(apiUsuario + `listar_usuario/${comentario.id_usuario}`).then(res => res.json())
+            comentariosHTML+=
+            `
                     <div class="card mb-3 border-0 rounded-4 shadow-sm" style="background-color: #2d3338; box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
                         <div class="card-body p-4">
                             <div class="d-flex align-items-start gap-3">
-                                <!-- Foto de perfil (vacía por ahora) -->
-                                <div class="rounded-circle bg-secondary flex-shrink-0" style="width: 40px; height: 40px;"></div>
+                                <img src="/back/uploads/pfp/diegofilhodaputa.png" class="img-fluid" width=50px alt="Imagen de cada usuario"
+                                style="clip-path:circle()"
+                                ></img>
                                 <div class="flex-grow-1">
                                     <div class="d-flex justify-content-between align-items-center mb-2">
                                         <p class="mb-0 fw-bold text-info fs-5">@${
@@ -124,10 +81,17 @@ async function cargarTabla() {
                             </div>
                         </div>
                     </div>
-                `
-                )
-                .join("")
-            : '<p class="text-center text-muted fs-5 py-4">No hay comentarios aún. Sé el primero en comentar.</p>';
+            `
+
+          })
+          
+          
+        }else{
+          comentariosHTML =
+          ` 
+            <p class="text-center text-muted fs-5 py-4">No hay comentarios aún. Sé el primero en comentar.</p>
+          `
+        }
 
         div.insertAdjacentHTML(
           "beforeend",
@@ -137,7 +101,7 @@ async function cargarTabla() {
                             <header class="d-flex justify-content-between">
                                 <div class="d-flex align-items-center gap-2">
                                     <span class="fw-bold text-light">@${
-                                      publicacion.creador_publicacion
+                                      nombre_creador
                                     } :</span>
                                     <span class="text-light">${
                                       publicacion.nombre_publicacion
@@ -149,9 +113,9 @@ async function cargarTabla() {
                               publicacion.contenido_publicacion
                             }</p>
                             ${
-                              traeImagen
-                                ? `<p class="mt-3 text-light">${publicacion.imagen_publicacion}</p>`
-                                : ""
+                              publicacion.img_usuario != ''
+                              ? `<p class="mt-3 text-light">${publicacion.imagen_publicacion}</p>`
+                              : ""
                             }
                 
                             <div class="d-flex align-items-center gap-2">
@@ -183,31 +147,33 @@ async function cargarTabla() {
                                     </button>
                 
                                 ${
-                                  esAdmin
-                                    ? `
-                                    <button class="btn btn-outline-light me-2 btnEditar" data-id="${publicacion._id}">
-                                        <i class="bi bi-pencil-square"></i>
-                                    </button>
-                                    <button class="btn btn-outline-light btnBorrar" data-id="${publicacion._id}">
-                                        <i class="bi bi-trash-fill"></i>
-                                    </button>
-                                `
+                                  data_usuario != null && data_usuario.is_admin
+                                    ? 
+                                    `
+                                      <button class="btn btn-outline-light me-2 btnEditar" data-id="${publicacion._id}">
+                                          <i class="bi bi-pencil-square"></i>
+                                      </button>
+                                      <button class="btn btn-outline-light btnBorrar" data-id="${publicacion._id}">
+                                          <i class="bi bi-trash-fill"></i>
+                                      </button>
+                                    `
                                     : ""
                                 }
                             </div>
                 
-                            <!-- Sección de comentarios (oculta por defecto) -->
-                            <div class="comentarios-container mt-4" id="comentarios-${
-                              publicacion._id
-                            }" style="display: none;">
+                            <div class="comentarios-container mt-4" id="comentarios-${publicacion._id}" style="display: none;">
                                 ${comentariosHTML}
                             </div>
                         </div>
                     </section>
                 `
-        );
-      });
-      if (esAdmin) {
+        )
+        
+
+        
+      })
+
+      if (data_usuario != null && data_usuario.is_admin) {
         document.querySelectorAll(".btnEditar").forEach((btn) => {
           btn.addEventListener("click", (e) => {
             const id = e.target.closest("button").getAttribute("data-id");
@@ -224,120 +190,17 @@ async function cargarTabla() {
 
         document.querySelectorAll(".btnBorrarComentario").forEach((btn) => {
           btn.addEventListener("click", (e) => {
-            const idComentario = e.target
-              .closest("button")
-              .getAttribute("data-id-comentario");
-            const id = e.target
-              .closest("button")
-              .getAttribute("data-id-publicacion");
+            const idComentario = e.target.closest("button").getAttribute("data-id-comentario");
+            const id = e.target.closest("button").getAttribute("data-id-publicacion");
             eliminarComentario(id, idComentario);
           });
+
         });
       }
+
     });
 }
-function eliminarPublicacion(id) {
-  alertify.confirm(
-    "¿Estás seguro de eliminar esta publicación?",
-    function (e) {
-      fetch(api + `borrar_publicacion/${id}`, { method: "DELETE" })
-        .then((res) => res.json())
-        .then((res) => {
-          alertify.success("Publicación borrada exitosamente");
-          limpiarTabla();
-          cargarTabla();
-        })
-        .catch((err) => {
-          alertify.error("Error al borrar la publicación: " + err);
-        });
-    },
-    function (e) {}
-  );
-}
-function limpiarTabla() {
-  const contenedor = document.getElementById("publicaciones");
-  contenedor.innerHTML = "";
-}
-document.addEventListener("click", (e) => {
-  if (e.target.closest(".modalComentario")) {
-    const publicacionId = e.target
-      .closest(".modalComentario")
-      .getAttribute("data-id");
-    console.log("ID de la publicación:", publicacionId);
-    document
-      .getElementById("comentarioModal")
-      .setAttribute("data-publicacion-id", publicacionId);
-    const modal = new bootstrap.Modal(
-      document.getElementById("comentarioModal")
-    );
-    modal.show();
-  }
-});
-document
-  .getElementById("btnAgregarComentario")
-  .addEventListener("click", async () => {
-    const idUsuario = document
-      .getElementById("nombreUsuario")
-      .getAttribute("data-id");
-    const nombreUsuario = document.getElementById("nombreUsuario").textContent;
-    const comentario = document.getElementById("comentarioUsuario").value;
-    const publicacionId = document
-      .getElementById("comentarioModal")
-      .getAttribute("data-publicacion-id");
 
-    if (!comentario.trim()) {
-      alertify.error("Por favor, escribe un comentario.");
-      return;
-    }
-    try {
-      const respuesta = await fetch(
-        api + `crear_comentario/${publicacionId}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            nombre_usuario: nombreUsuario,
-            comentario_usuario: comentario,
-          }),
-        }
-      );
-      const datos = await respuesta.json();
-      if (datos.completado) {
-        alertify.success("Comentario agregado correctamente.");
-        const modal = bootstrap.Modal.getInstance(
-          document.getElementById("comentarioModal")
-        );
-        modal.hide();
-        limpiarTabla();
-        cargarTabla();
-      } else {
-        alertify.error("Error al agregar el comentario: " + datos.mensaje);
-      }
-    } catch (error) {
-      alertify.error("Error en la solicitud: " + error.message);
-    }
-  });
-document.addEventListener("DOMContentLoaded", cargarTabla);
-document.addEventListener("click", (e) => {
-  if (e.target.closest(".btn-toggle-comentarios")) {
-    const publicacionId = e.target.closest("button").getAttribute("data-id");
-    const comentariosContainer = document.getElementById(
-      `comentarios-${publicacionId}`
-    );
-    const flechaIcono = e.target.closest("button").querySelector("i");
-    if (comentariosContainer.style.display === "none") {
-      comentariosContainer.style.display = "block";
-      flechaIcono.classList.remove("bi-chevron-down");
-      flechaIcono.classList.add("bi-chevron-up");
-    } else {
-      comentariosContainer.style.display = "none";
-      flechaIcono.classList.remove("bi-chevron-up");
-      flechaIcono.classList.add("bi-chevron-down");
-    }
-  }
-});
 function eliminarComentario(id, parametro) {
   alertify.confirm(
     "¿Estás seguro de eliminar este comentario?",
@@ -358,3 +221,177 @@ function eliminarComentario(id, parametro) {
     },
   );
 }
+
+function eliminarPublicacion(id) {
+  alertify.confirm(
+    "¿Estás seguro de eliminar esta publicación?",
+    function (e) {
+      fetch(api + `borrar_publicacion/${id}`, { method: "DELETE" })
+        .then((res) => res.json())
+        .then((res) => {
+          alertify.success("Publicación borrada exitosamente");
+          limpiarTabla();
+          cargarTabla();
+        })
+        .catch((err) => {
+          alertify.error("Error al borrar la publicación: " + err);
+        });
+    },
+    function (e) {}
+  );
+}
+
+function limpiarTabla() {
+  const contenedor = document.getElementById("publicaciones");
+  contenedor.innerHTML = "";
+}
+
+document.addEventListener('DOMContentLoaded',()=>{
+  const session_usuario = JSON.parse(sessionStorage.getItem("sesion_usuario")) || null
+  LoadNavBar(session_usuario)
+  cargarTabla(session_usuario)
+  
+  document.getElementById("hagaloPapi").addEventListener("click", crearPublicacion);
+
+  function crearPublicacion(e) {
+    e.preventDefault();
+    const nombre_publicacion = document.getElementById("titulo").value;
+    const id_creador = session_usuario != null ? session_usuario.id_usuario : null;
+    const nombre_creador = session_usuario != null ? session_usuario.nombre_usuario : null;
+    const contenido_publicacion = document.getElementById("contenido").value;
+    const imagen_publicacion = document.getElementById("imagen").value;
+  
+
+    if (id_creador == null || nombre_creador == null) {
+      alertify.error("Aun no has iniciado sesión");
+      return
+    }
+
+    if (!nombre_publicacion || !contenido_publicacion) {
+      alertify.error("Llena todos los campos");
+      return;
+    }
+  
+    
+  
+    fetch(api + "crear_publicacion", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        nombre_publicacion,
+        id_creador,
+        nombre_creador,
+        contenido_publicacion,
+        imagen_publicacion,
+      }),
+    })
+    .then((res) => res.json())
+    .then((res) => {
+        if (res.completado) {
+          alertify.success("Publicación creada");
+          limpiarTabla();
+          cargarTabla(session_usuario);
+        } else {
+          alertify.error("No se pudo completar la acción: ", res.mensaje);
+        }
+      })
+    .catch((err) => {
+      alertify.error("Error al crear la publicacion: ", err);
+    })
+  
+  }
+
+  document.getElementById("btnAgregarComentario").addEventListener("click", async () => {
+    const idUsuario = session_usuario.id_usuario || null 
+    const nombreUsuario = session_usuario.nombre_usuario || null 
+    const comentario = document.getElementById("comentarioUsuario").value;
+    const publicacionId = document.getElementById("comentarioModal").getAttribute("data-publicacion-id");
+
+    if (idUsuario == null || nombreUsuario == null) {
+      alertify.error("No has iniciado sesion");
+      return;
+    }
+    if (!comentario.trim()) {
+      alertify.error("Por favor, escribe un comentario.");
+      return;
+    }
+
+    try {
+      const respuesta = await fetch(
+        api + `crear_comentario/${publicacionId}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            id_usuario:idUsuario,
+            nombre_usuario: nombreUsuario,
+            comentario_usuario: comentario,
+          }),
+        }
+      );
+      const datos = await respuesta.json();
+      if (datos.completado) {
+        alertify.success("Comentario agregado correctamente.");
+        const modal = bootstrap.Modal.getInstance(
+          document.getElementById("comentarioModal")
+        );
+        modal.hide();
+        limpiarTabla();
+        cargarTabla(session_usuario);
+      } else {
+        alertify.error("Error al agregar el comentario: " + datos.mensaje);
+      }
+    } catch (error) {
+      alertify.error("Error en la solicitud: " + error.message);
+    }
+  });
+
+  document.addEventListener("click", (e) => {
+    if (e.target.closest(".btn-toggle-comentarios")) {
+      const publicacionId = e.target.closest("button").getAttribute("data-id");
+      const comentariosContainer = document.getElementById(
+        `comentarios-${publicacionId}`
+      );
+      const flechaIcono = e.target.closest("button").querySelector("i");
+      if (comentariosContainer.style.display === "none") {
+        comentariosContainer.style.display = "block";
+        flechaIcono.classList.remove("bi-chevron-down");
+        flechaIcono.classList.add("bi-chevron-up");
+      } else {
+        comentariosContainer.style.display = "none";
+        flechaIcono.classList.remove("bi-chevron-up");
+        flechaIcono.classList.add("bi-chevron-down");
+      }
+    }
+
+    if (e.target.closest(".modalComentario")) {
+      const publicacionId = e.target.closest(".modalComentario").getAttribute("data-id");
+      document.getElementById("comentarioModal").setAttribute("data-publicacion-id", publicacionId);
+      const modal = new bootstrap.Modal(
+        document.getElementById("comentarioModal")
+      );
+      modal.show();
+    }
+
+    if (e.target.closest("#btn_login")) {
+      if (e.target.closest("#btn_login").value == "cerrar_sesion") {
+        sessionStorage.clear("sesion_usuario")
+      }
+      
+    }
+
+  });
+
+})
+
+
+
+
+
+
+
+
