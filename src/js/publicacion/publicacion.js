@@ -54,7 +54,7 @@ async function FillComments(array) {
 
                                     <button type="button" class="btn p-0 border-0 bg-transparent btnBorrarComentario" 
                                     data-id-comentario="${
-                                      array._id
+                                      comentario._id
                                     }" 
                                     data-id-publicacion="${
                                       array._id
