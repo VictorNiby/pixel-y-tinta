@@ -35,48 +35,43 @@ function LoadNavBar(data_user) {
 }
 
 async function FillComments(array) {
-  let container = ''
-  array.comentarios.forEach(async(comentario)=>{
-    
-    container+=
+  let comentarios = await Promise.all(array.comentarios.map(async (comentario) => {
+    const img_usuario = await fetch(apiUsuario + `listar_usuario/${comentario.id_usuario}`).then(res => res.json())
+    return `
+      <div class="card mb-3 border-0 rounded-4 shadow-sm" style="background-color: #2d3338; box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
+          <div class="card-body p-4">
+              <div class="d-flex align-items-start gap-3">
+                  <img src="/back/uploads/pfp/${img_usuario.resultado.img_usuario}" class="img-fluid" width=510px alt="Imagen de cada usuario"
+                  style="clip-path:circle()"></img>
+                  <div class="flex-grow-1">
+                      <div class="d-flex justify-content-between align-items-center mb-2">
+                          <p class="mb-0 fw-bold text-info fs-5">@${
+                            comentario.nombre_usuario
+                          }</p>
+                          <button type="button" class="btn p-0 border-0 bg-transparent btnBorrarComentario" 
+                          data-id-comentario="${
+                            comentario._id
+                          }" 
+                          data-id-publicacion="${
+                            array._id
+                          }">
+                          <i class="bi bi-trash-fill text-secondary"></i>
+                          </button>
+                      </div>
+                      <p class="mb-0 text-light fs-6">${
+                        comentario.comentario_usuario
+                      }</p>
+                      <small class="text-light">${calcularTiempoTranscurrido(comentario.fecha_publicacion)}</small>
+                  </div>
+              </div>
+          </div>
+      </div>
     `
-            <div class="card mb-3 border-0 rounded-4 shadow-sm" style="background-color: #2d3338; box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
-                <div class="card-body p-4">
-                    <div class="d-flex align-items-start gap-3">
-                        <img src="/back/uploads/pfp/diegofilhodaputa.png" class="img-fluid" width=50px alt="Imagen de cada usuario"
-                        style="clip-path:circle()"
-                        ></img>
-                        <div class="flex-grow-1">
-                            <div class="d-flex justify-content-between align-items-center mb-2">
-                                <p class="mb-0 fw-bold text-info fs-5">@${
-                                  comentario.nombre_usuario
-                                }</p>
-
-                                    <button type="button" class="btn p-0 border-0 bg-transparent btnBorrarComentario" 
-                                    data-id-comentario="${
-                                      comentario._id
-                                    }" 
-                                    data-id-publicacion="${
-                                      array._id
-                                    }">
-                                    <i class="bi bi-trash-fill text-secondary"></i>
-                                    </button>
-
-                            </div>
-                            <p class="mb-0 text-light fs-6">${
-                              comentario.comentario_usuario
-                            }</p>
-                            <small class="text-light">${calcularTiempoTranscurrido(comentario.fecha_publicacion)}</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-    `
-
-   })
-
-   return container
+  }))
+  
+  return comentarios.join('')
 }
+
 
 async function cargarTabla(data_usuario) {
   await fetch(api + "listar_publicacion")
@@ -377,6 +372,12 @@ document.addEventListener('DOMContentLoaded',()=>{
         document.getElementById("comentarioModal")
       );
       modal.show();
+    }
+
+    if (e.target.closest(".btnBorrarComentario")) {
+      const id_publicacion = e.target.closest("button").getAttribute("data-id-publicacion");
+      const id_comentario = e.target.closest("button").getAttribute("data-id-comentario");
+      eliminarComentario(id_publicacion, id_comentario);
     }
 
     if (e.target.closest("#btn_login")) {
