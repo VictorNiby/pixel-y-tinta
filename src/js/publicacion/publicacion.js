@@ -34,58 +34,65 @@ function LoadNavBar(data_user) {
   }
 }
 
+async function FillComments(array) {
+  let container = ''
+  array.comentarios.forEach(async(comentario)=>{
+    
+    container+=
+    `
+            <div class="card mb-3 border-0 rounded-4 shadow-sm" style="background-color: #2d3338; box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-start gap-3">
+                        <img src="/back/uploads/pfp/diegofilhodaputa.png" class="img-fluid" width=50px alt="Imagen de cada usuario"
+                        style="clip-path:circle()"
+                        ></img>
+                        <div class="flex-grow-1">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <p class="mb-0 fw-bold text-info fs-5">@${
+                                  comentario.nombre_usuario
+                                }</p>
+
+                                    <button type="button" class="btn p-0 border-0 bg-transparent btnBorrarComentario" 
+                                    data-id-comentario="${
+                                      array._id
+                                    }" 
+                                    data-id-publicacion="${
+                                      array._id
+                                    }">
+                                    <i class="bi bi-trash-fill text-secondary"></i>
+                                    </button>
+
+                            </div>
+                            <p class="mb-0 text-light fs-6">${
+                              comentario.comentario_usuario
+                            }</p>
+                            <small class="text-light">${calcularTiempoTranscurrido(comentario.fecha_publicacion)}</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    `
+
+   })
+
+   return container
+}
+
 async function cargarTabla(data_usuario) {
-  fetch(api + "listar_publicacion")
+  await fetch(api + "listar_publicacion")
     .then((res) => res.json())
     .then((res) => {
-      const div = document.getElementById("publicaciones");
-      res.publicaciones.forEach(async(publicacion) => {
+        const div = document.getElementById("publicaciones");
+        res.publicaciones.forEach(async(publicacion) => {
         const nombre_creador = publicacion.nombre_creador
         const tiempoTranscurrido = calcularTiempoTranscurrido(publicacion.fecha_publicacion);
         const numComentarios = publicacion.comentarios.length;
         let comentariosHTML = ""
 
         if (numComentarios > 0) {
-           publicacion.comentarios.map(async(comentario)=>{
-            // const img_usuario = await fetch(apiUsuario + `listar_usuario/${comentario.id_usuario}`).then(res => res.json())
-            comentariosHTML+=
-            `
-                    <div class="card mb-3 border-0 rounded-4 shadow-sm" style="background-color: #2d3338; box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
-                        <div class="card-body p-4">
-                            <div class="d-flex align-items-start gap-3">
-                                <img src="/back/uploads/pfp/diegofilhodaputa.png" class="img-fluid" width=50px alt="Imagen de cada usuario"
-                                style="clip-path:circle()"
-                                ></img>
-                                <div class="flex-grow-1">
-                                    <div class="d-flex justify-content-between align-items-center mb-2">
-                                        <p class="mb-0 fw-bold text-info fs-5">@${
-                                          comentario.nombre_usuario
-                                        }</p>
 
-                                            <button type="button" class="btn p-0 border-0 bg-transparent btnBorrarComentario" 
-                                            data-id-comentario="${
-                                              comentario._id
-                                            }" 
-                                            data-id-publicacion="${
-                                              publicacion._id
-                                            }">
-                                            <i class="bi bi-trash-fill text-secondary"></i>
-                                            </button>
-
-                                    </div>
-                                    <p class="mb-0 text-light fs-6">${
-                                      comentario.comentario_usuario
-                                    }</p>
-                                    <small class="text-light">${calcularTiempoTranscurrido(comentario.fecha_publicacion)}</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-            `
-
-          })
-          
-          
+          comentariosHTML = await FillComments(publicacion)
+         
         }else{
           comentariosHTML =
           ` 
@@ -93,9 +100,7 @@ async function cargarTabla(data_usuario) {
           `
         }
 
-        div.insertAdjacentHTML(
-          "beforeend",
-          `
+        div.innerHTML += `
                     <section class="card mb-4">
                         <div class="card-body">
                             <header class="d-flex justify-content-between">
@@ -166,10 +171,7 @@ async function cargarTabla(data_usuario) {
                             </div>
                         </div>
                     </section>
-                `
-        )
-        
-
+          `
         
       })
 
