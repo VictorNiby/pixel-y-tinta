@@ -21,44 +21,38 @@ function calcularTiempoTranscurrido(fechaISO) {
 }
 
 function LoadNavBar(data_user) {
-  const nombre_usuario = document.querySelector('#nombreUsuario')
-
-  nombre_usuario.textContent = data_user != null ? data_user.nombre_usuario : ''
 
   if (data_user != null) {
-    // document.querySelector('#perfil').innerHTML = ''
-    // document.querySelector('#perfil').innerHTML = `
-    //   <div class="btn-group align-self-center">
-    //         <img src="/back/uploads/pfp/${data_user.img_usuario}" width="40px"
-    //          alt="Imagen que guardo el usuario como foto de perfil"
-    //          class="img-fluid border-light"
-    //          style="clip-path: circle();cursor: pointer;"
-    //          data-bs-toggle="dropdown"
-    //          >
-            
+    document.querySelector('#perfil').innerHTML = ''
+    document.querySelector('#perfil').innerHTML = `
+      <div class="dropdown">
+            <button class="btn dropdown-toggle" data-bs-toggle="dropdown" >
+              <img src="/back/uploads/pfp/1741692831450-Animation - 1739538767768.gif" alt="Foto de perfil del usuario."
+              width="30px"
+              class="me-1"
+              style="clip-path: circle();">
+              <span class="text-light">${data_user.nombre_usuario}</span>
+            </button>
+          
+            <ul class="dropdown-menu">
+              <li>
+                <a class="dropdown-item text-white"
+                href="#">
+                  Editar perfil
+                </a>
+              </li>
 
-    //         <ul class="dropdown-menu">
+              <li>
+                <a class="dropdown-item text-white"
+                href="/front/login/login.html"
+                id="log_out">
+                  Cerrar Sesión
+                </a>
+              </li>
+            </ul>
 
-    //           <li>
-    //             <a class="dropdown-item text-white"
-    //             href="#">
-    //               Editar perfil
-    //             </a>
-    //           </li>
-
-    //           <li>
-    //             <a class="dropdown-item text-white"
-    //             href="/front/login/login.html"
-    //             id="log_out">
-    //               Cerrar Sesión
-    //             </a>
-    //           </li>
-              
-              
-    //         </ul>
-
-    //   </div>
-    // `
+      </div>
+    `
   }
 }
 
