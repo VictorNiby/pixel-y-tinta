@@ -27,7 +27,7 @@ function LoadNavBar(data_user) {
     document.querySelector('#perfil').innerHTML = `
       <div class="dropdown">
             <button class="btn dropdown-toggle" data-bs-toggle="dropdown" >
-              <img src="/back/uploads/pfp/1741692831450-Animation - 1739538767768.gif" alt="Foto de perfil del usuario."
+              <img src="/back/uploads/pfp/${data_user.img_usuario}" alt="Foto de perfil del usuario."
               width="30px"
               class="me-1"
               style="clip-path: circle();">

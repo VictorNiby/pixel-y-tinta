@@ -23,7 +23,7 @@ window.addEventListener('load',()=>{
 
             const img_usuario = await fetch(api_url+`listar_usuario/${sesion_usuario.id_usuario}`).then(res => res.json())
             
-            sesion_usuario.img_usuario = img_usuario.img_usuario
+            sesion_usuario.img_usuario = img_usuario.resultado.img_usuario
 
             sessionStorage.removeItem('sesion_usuario')
             sessionStorage.setItem('sesion_usuario',JSON.stringify(sesion_usuario))
