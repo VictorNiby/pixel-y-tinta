@@ -326,7 +326,7 @@ const subir_imagen = async (req, res) => {
       const extension = originalname.split(".").pop().toLowerCase();
 
       // Validar extensión de la imagen
-      const extensiones_validas = ["png", "jpg", "jpeg", "gif"];
+      const extensiones_validas = ["png", "jpg", "jpeg"];
       if (!extensiones_validas.includes(extension)) {
         // Eliminar archivo inválido
         fs.unlink(path); 

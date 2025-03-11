@@ -279,6 +279,14 @@ document.addEventListener('DOMContentLoaded',()=>{
     const nombre_creador = session_usuario != null ? session_usuario.nombre_usuario : null;
     const contenido_publicacion = document.getElementById("contenido").value;
     const imagen_publicacion = document.getElementById("imagen").value;
+    const form = document.getElementById("formPu");
+  //   const form_data = new FormData(form)
+  //   form_data.append("id",publicacion._id,)
+  //   form_data.append("imagen",imagen_publicacion)
+  //   const request = fetch(api + 'subir_imagen',{
+  //     method:"POST",
+  //     body: form_data
+  // }).then(res => res.json())
   
 
     if (id_creador == null || nombre_creador == null) {

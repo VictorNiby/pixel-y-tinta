@@ -239,6 +239,73 @@ const editar_comentario_id = async (req, res) => {
     });
   }
 };
+
+const subir_imagen_publi = async (req, res) => {
+
+  try {
+    if (!req.file) {
+      return res.status(400).json({
+        estado: false,
+        mensaje: "No se ha subido ninguna imagen",
+      });
+    }
+    
+    // validar la extension de la imagen
+    const { originalname, filename, path } = req.file;
+    const extension = originalname.split(".").pop().toLowerCase();
+
+    // Validar extensión de la imagen
+    const extensiones_validas = ["png", "jpg", "jpeg","gif"];
+    if (!extensiones_validas.includes(extension)) {
+      // Eliminar archivo inválido
+      fs.unlink(path); 
+
+      return res.status(400).json({
+        estado: false,
+        mensaje: "Extensión de archivo no permitida",
+      });
+    }
+
+    const id_publicacion = req.body.id_publicacion
+
+    if (id_publicacion == null) {
+      return res.status(400).json(
+          {
+              completado:false,
+              mensaje : "No se envío el id de la publicacion"
+          }
+      )
+    }
+
+    const publicacion_actualizada = await publicacion.findByIdAndUpdate(id_publicacion, {
+      imagen_publicacion: filename,
+    });
+
+    
+    if (publicacion_actualizada == null) {
+      return res.status(400).json(
+          {
+              completado:false,
+              mensaje : "No se encontró la publicacion"
+          }
+      )
+    }
+
+    return await res.status(200).json({
+      completado: true,
+      mensaje: "Foto insertada"
+    });
+
+
+  } catch (error) {
+    return res.status(500).json({
+      completado: false,
+      mensaje: "Error al procesar la imagen"+error
+    });
+  }
+
+};
+
 module.exports = {
   listar_publicacion,
   crear_publicacion,
@@ -248,4 +315,5 @@ module.exports = {
   crear_comentario,
   borrar_comentario_id,
   editar_comentario_id,
+  subir_imagen_publi
 };
