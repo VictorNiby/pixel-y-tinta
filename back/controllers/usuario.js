@@ -226,6 +226,7 @@ const log_in = async (req,resp)=>{
                     id_usuario :usuario_existe._id,
                     correo_usuario :usuario_existe.correo_usuario,
                     nombre_usuario :usuario_existe.nombre_usuario,
+                    img_usuario :usuario_existe.img_usuario,
                     fecha_nacimiento :usuario_existe.fecha_nacimiento,
                     is_admin: usuario_existe.is_admin
                 },

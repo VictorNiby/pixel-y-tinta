@@ -22,15 +22,43 @@ function calcularTiempoTranscurrido(fechaISO) {
 
 function LoadNavBar(data_user) {
   const nombre_usuario = document.querySelector('#nombreUsuario')
-  const btn_signup = document.querySelector('#btn_signup')
-  const btn_login = document.querySelector('#btn_login')
 
   nombre_usuario.textContent = data_user != null ? data_user.nombre_usuario : ''
 
   if (data_user != null) {
-    btn_signup.style.display = "none"
-    btn_login.textContent = "Cerrar sesión"
-    btn_login.value = "cerrar_sesion"
+    // document.querySelector('#perfil').innerHTML = ''
+    // document.querySelector('#perfil').innerHTML = `
+    //   <div class="btn-group align-self-center">
+    //         <img src="/back/uploads/pfp/${data_user.img_usuario}" width="40px"
+    //          alt="Imagen que guardo el usuario como foto de perfil"
+    //          class="img-fluid border-light"
+    //          style="clip-path: circle();cursor: pointer;"
+    //          data-bs-toggle="dropdown"
+    //          >
+            
+
+    //         <ul class="dropdown-menu">
+
+    //           <li>
+    //             <a class="dropdown-item text-white"
+    //             href="#">
+    //               Editar perfil
+    //             </a>
+    //           </li>
+
+    //           <li>
+    //             <a class="dropdown-item text-white"
+    //             href="/front/login/login.html"
+    //             id="log_out">
+    //               Cerrar Sesión
+    //             </a>
+    //           </li>
+              
+              
+    //         </ul>
+
+    //   </div>
+    // `
   }
 }
 
@@ -41,7 +69,7 @@ async function FillComments(array) {
       <div class="card mb-3 border-0 rounded-4 shadow-sm" style="background-color: #2d3338; box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
           <div class="card-body p-4">
               <div class="d-flex align-items-start gap-3">
-                  <img src="/back/uploads/pfp/${img_usuario.resultado.img_usuario}" class="img-fluid" width=510px alt="Imagen de cada usuario"
+                  <img src="/back/uploads/pfp/${img_usuario.resultado.img_usuario}" class="img-fluid" width=51px alt="Imagen de cada usuario"
                   style="clip-path:circle()"></img>
                   <div class="flex-grow-1">
                       <div class="d-flex justify-content-between align-items-center mb-2">
@@ -380,11 +408,8 @@ document.addEventListener('DOMContentLoaded',()=>{
       eliminarComentario(id_publicacion, id_comentario);
     }
 
-    if (e.target.closest("#btn_login")) {
-      if (e.target.closest("#btn_login").value == "cerrar_sesion") {
-        sessionStorage.clear("sesion_usuario")
-      }
-      
+    if (e.target.closest("#log_out")) {
+      sessionStorage.clear("sesion_usuario")
     }
 
   });

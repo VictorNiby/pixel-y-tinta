@@ -68,6 +68,14 @@
     transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
 
+ul{
+    background-color: #242930 !important;
+}
+
+ul>li>a:hover{
+    background-color: rgb(73, 73, 73) !important;
+}
+
 .card:hover {
     transform: translateY(-5px);
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
