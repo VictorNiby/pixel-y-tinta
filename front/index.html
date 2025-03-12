@@ -28,7 +28,7 @@
   <body>
     <nav class="navbar navbar-expand-lg p-3" id="navbar">
       <div class="container d-flex justify-content-between">
-        <a href="#" class="navbar-brand">Pixel y Tinta</a>
+        <a href="index.html" class="navbar-brand">Pixel y Tinta</a>
 
         <div id="perfil">
           <a href="login/login.html" class="btn btn-outline-light me-2"
@@ -82,6 +82,57 @@
       </p>
       <p>© 2025 Pixel y Tinta - Todos los derechos reservados</p>
     </footer>
+    <!--MODAL EDITAR PERFIL-->
+    <div class="modal fade" id="modal_perfil" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog">
+          <div class="modal-content bg-dark text-light">
+              <div class="modal-header">
+                  <h5 class="modal-title">Editar Perfil</h5>
+                  <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                  <form id="form_perfil">
+                      <div class="row text-center mb-3">
+                        <div class="col">
+                          <label for="input_pfp" class="p-3 rounded-3 " id="pfp">
+                            <img alt="Imagen actual de perfil que tiene el usuario" id="img_pfp" class="img-fluid rounded-circle" width="100px" style="clip-path: circle();">
+                            <p><small>Click para cambiar de foto</small></p>
+                            <input type="file" id="input_pfp" accept="image/*" name="pfp" hidden>
+                          </label>
+                        </div>
+                      </div>
+
+                      <div class="mb-3">
+                        <label for="input_nombre" class="form-label">Nombre de usuario</label>
+                        <input type="text" class="form-control" id="input_nombre">
+                      </div>
+
+                      <div class="mb-3">
+                        <label for="select_paises" class="form-label">Seleccione un país</label>
+                        <select class="form-select text-white" id="select_paises">
+                          
+                        </select>
+                      </div>
+
+
+                      <div class="mb-3">
+                        <a href="#" class="text-decoration-none">
+                          <p><small>Cambiar contraseña</small></p>
+                        </a>
+                      </div>
+
+                      
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-success" id="btn_editar_perfil">Enviar</button>
+                      </div>
+                  </form>
+              </div>
+              
+          </div>
+      </div>
+    </div>
+
 
         <!-- Modal para agregar comentarios -->
         <div class="modal fade" id="comentarioModal" tabindex="-1" aria-labelledby="comentarioModalLabel" aria-hidden="true">
@@ -107,8 +158,8 @@
             </div>
         </div>
 
-                <!-- Modal para editar publicaciones -->
-                <div class="modal fade" id="publicacionModal" tabindex="-1" aria-labelledby="publicacionModalLabel" aria-hidden="true">
+        <!-- Modal para editar publicaciones -->
+          <div class="modal fade" id="publicacionModal" tabindex="-1" aria-labelledby="publicacionModalLabel" aria-hidden="true">
                   <div class="modal-dialog">
                       <div class="modal-content bg-dark text-light">
                           <div class="modal-header">
@@ -134,7 +185,7 @@
                           </div>
                       </div>
                   </div>
-              </div>
+          </div>
     </div>
 
     <script src="../src/js/publicacion/publicacion.js"></script>

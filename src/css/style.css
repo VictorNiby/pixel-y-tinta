@@ -72,8 +72,21 @@ ul{
     background-color: #242930 !important;
 }
 
-ul>li>a:hover{
+ul>li>a:hover,ul>li>button:hover{
     background-color: rgb(73, 73, 73) !important;
+}
+
+#select_paises{
+    background-color: #161b22;
+    border: 1px solid #30363d;
+}
+
+#pfp{
+    cursor: pointer;
+    transition: all .2s ease-in-out;
+}
+#pfp:hover{
+    background-color: #282a2e;
 }
 
 .card:hover {

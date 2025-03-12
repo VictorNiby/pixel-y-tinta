@@ -19,14 +19,13 @@ window.addEventListener('load',()=>{
         request.completado ? alertify.success(`${request.mensaje}`) : alertify.error(`${request.mensaje}`)
 
         if (request.completado) {
-            const sesion_usuario = JSON.parse(sessionStorage.getItem("sesion_usuario"))
 
-            const img_usuario = await fetch(api_url+`listar_usuario/${sesion_usuario.id_usuario}`).then(res => res.json())
+            const img_usuario = await fetch(api_url+`listar_usuario/${data_session.id_usuario}`).then(res => res.json())
             
-            sesion_usuario.img_usuario = img_usuario.resultado.img_usuario
+            data_session.img_usuario = img_usuario.resultado.img_usuario
 
             sessionStorage.removeItem('sesion_usuario')
-            sessionStorage.setItem('sesion_usuario',JSON.stringify(sesion_usuario))
+            sessionStorage.setItem('sesion_usuario',JSON.stringify(data_session))
 
             setTimeout(()=>{
                 window.location.replace("../index.html")

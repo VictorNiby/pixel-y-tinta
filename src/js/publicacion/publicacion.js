@@ -1,5 +1,43 @@
 const api = "http://127.0.0.1:4000/api/publicacion/";
 const apiUsuario = "http://127.0.0.1:4000/api/usuarios/";
+const paises = [
+  "Afganistán", "Albania", "Alemania", "Andorra", "Angola", "Antigua y Barbuda", "Arabia Saudita", "Argelia", "Argentina", "Armenia",
+  "Australia", "Austria", "Azerbaiyán", "Bahamas", "Bangladés", "Barbados", "Baréin", "Bélgica", "Belice", "Benín",
+  "Bielorrusia", "Birmania", "Bolivia", "Bosnia y Herzegovina", "Botsuana", "Brasil", "Brunéi", "Bulgaria", "Burkina Faso", "Burundi",
+  "Bután", "Cabo Verde", "Camboya", "Camerún", "Canadá", "Catar", "Chad", "Chile", "China", "Chipre",
+  "Colombia", "Comoras", "Corea del Norte", "Corea del Sur", "Costa de Marfil", "Costa Rica", "Croacia", "Cuba", "Dinamarca", "Dominica",
+  "Ecuador", "Egipto", "El Salvador", "Emiratos Árabes Unidos", "Eritrea", "Eslovaquia", "Eslovenia", "España", "Estados Unidos", "Estonia",
+  "Esuatini", "Etiopía", "Filipinas", "Finlandia", "Fiyi", "Francia", "Gabón", "Gambia", "Georgia", "Ghana",
+  "Granada", "Grecia", "Guatemala", "Guyana", "Guinea", "Guinea ecuatorial", "Guinea-Bisáu", "Haití", "Honduras", "Hungría",
+  "India", "Indonesia", "Irak", "Irán", "Irlanda", "Islandia", "Islas Marshall", "Islas Salomón", "Israel", "Italia",
+  "Jamaica", "Japón", "Jordania", "Kazajistán", "Kenia", "Kirguistán", "Kiribati", "Kuwait", "Laos", "Lesoto",
+  "Letonia", "Líbano", "Liberia", "Libia", "Liechtenstein", "Lituania", "Luxemburgo", "Madagascar", "Malasia", "Malaui",
+  "Maldivas", "Malí", "Malta", "Marruecos", "Mauricio", "Mauritania", "México", "Micronesia", "Moldavia", "Mónaco",
+  "Mongolia", "Montenegro", "Mozambique", "Namibia", "Nauru", "Nepal", "Nicaragua", "Níger", "Nigeria", "Noruega",
+  "Nueva Zelanda", "Omán", "Países Bajos", "Pakistán", "Palaos", "Panamá", "Papúa Nueva Guinea", "Paraguay", "Perú", "Polonia",
+  "Portugal", "Reino Unido", "República Centroafricana", "República Checa", "República del Congo", "República Democrática del Congo", "República Dominicana", "Ruanda", "Rumania", "Rusia",
+  "Samoa", "San Cristóbal y Nieves", "San Marino", "San Vicente y las Granadinas", "Santa Lucía", "Santo Tomé y Príncipe", "Senegal", "Serbia", "Seychelles", "Sierra Leona",
+  "Singapur", "Siria", "Somalia", "Sri Lanka", "Sudáfrica", "Sudán", "Sudán del Sur", "Suecia", "Suiza", "Surinam",
+  "Tailandia", "Tanzania", "Tayikistán", "Timor Oriental", "Togo", "Tonga", "Trinidad y Tobago", "Túnez", "Turkmenistán", "Turquía",
+  "Tuvalu", "Ucrania", "Uganda", "Uruguay", "Uzbekistán", "Vanuatu", "Vaticano", "Venezuela", "Vietnam", "Yemen",
+  "Yibuti", "Zambia", "Zimbabue"
+];
+
+function FillModalPerfil(data_usuario) {
+  
+  document.querySelector('#input_nombre').value = data_usuario.nombre_usuario
+
+  document.querySelector('#img_pfp').setAttribute('src',`/back/uploads/pfp/${data_usuario.img_usuario}`)
+  paises.forEach((data)=>{
+      const option = document.createElement('option')
+      option.value = data
+      option.innerHTML = data
+      if (data_usuario.pais_usuario == data) {
+        option.setAttribute("selected","true")
+      }
+      document.querySelector('#select_paises').appendChild(option)
+  })
+}
 
 function calcularTiempoTranscurrido(fechaISO) {
   const fechaPublicacion = new Date(fechaISO);
@@ -26,7 +64,7 @@ function LoadNavBar(data_user) {
     document.querySelector('#perfil').innerHTML = ''
     document.querySelector('#perfil').innerHTML = `
       <div class="dropdown">
-            <button class="btn dropdown-toggle" data-bs-toggle="dropdown" >
+            <button class="btn dropdown-toggle w-100" data-bs-toggle="dropdown" >
               <img src="/back/uploads/pfp/${data_user.img_usuario}" alt="Foto de perfil del usuario."
               width="30px"
               class="me-1"
@@ -34,12 +72,14 @@ function LoadNavBar(data_user) {
               <span class="text-light">${data_user.nombre_usuario}</span>
             </button>
           
-            <ul class="dropdown-menu">
+            <ul class="dropdown-menu w-100">
               <li>
-                <a class="dropdown-item text-white"
-                href="#">
+                <button class="dropdown-item text-white"
+                id="btn_editar_perfil"
+                data-bs-target="#modal_perfil"
+                data-bs-toggle = "modal">
                   Editar perfil
-                </a>
+                </button>
               </li>
 
               <li>
@@ -103,7 +143,6 @@ async function FillComments(array,data_usuario) {
   
   return comentarios.join('')
 }
-
 
 async function cargarTabla(data_usuario) {
   await fetch(api + "listar_publicacion")
@@ -283,10 +322,44 @@ function limpiarTabla() {
   contenedor.innerHTML = "";
 }
 
+async function ActualizarSesion() {
+  const data_session = JSON.parse(sessionStorage.getItem("sesion_usuario"))
+  const datos_usuario = await fetch(apiUsuario+`listar_usuario/${data_session.id_usuario}`).then(res => res.json())
+
+  data_session.nombre_usuario = datos_usuario.resultado.nombre_usuario
+  data_session.pais_usuario = datos_usuario.resultado.pais_usuario
+  data_session.img_usuario = datos_usuario.resultado.img_usuario
+
+  sessionStorage.removeItem('sesion_usuario')
+  sessionStorage.setItem('sesion_usuario',JSON.stringify(data_session))
+
+  setTimeout(()=>{
+    location.reload()
+  },700)
+
+}
+
+async function ActualizarPFP(form) {
+  const data_session = JSON.parse(sessionStorage.getItem("sesion_usuario"))
+  
+  const form_data = new FormData(form)
+  form_data.append("id",data_session.id_usuario)
+
+  await fetch(apiUsuario + 'subir_imagen',{
+      method:"POST",
+      body:form_data
+  }).then(res => res.json())
+
+}
+
 document.addEventListener('DOMContentLoaded',()=>{
   const session_usuario = JSON.parse(sessionStorage.getItem("sesion_usuario")) || null
   LoadNavBar(session_usuario)
   cargarTabla(session_usuario)
+
+  if (session_usuario != null) {
+    FillModalPerfil(session_usuario)
+  }
   
   document.getElementById("hagaloPapi").addEventListener("click", crearPublicacion);
 
@@ -350,9 +423,68 @@ document.addEventListener('DOMContentLoaded',()=>{
   
   }
 
+  document.querySelector('#input_pfp').addEventListener('change',()=>{
+    const img_url = URL.createObjectURL(document.querySelector('#input_pfp').files[0])
+
+    const extensiones_validas = ["png", "jpg", "jpeg","gif"];
+
+    const file_extension = document.querySelector('#input_pfp').files[0].name.split('.').pop().toLowerCase()
+
+    if (extensiones_validas.includes(file_extension)) {
+      document.querySelector('#img_pfp').setAttribute('src',img_url)
+    }else{
+      alertify.error("No se permiten ese tipo de archivos")
+    }
+
+  })
+
+  document.querySelector('#modal_perfil').addEventListener('hidden.bs.modal', () => {
+    FillModalPerfil(session_usuario)
+  })
+
+  document.querySelector('#form_perfil').addEventListener('submit',async(e)=>{
+    e.preventDefault()
+    console.log(document.querySelector('#input_pfp').value);
+    
+    const body_request = {
+      nombre_usuario:document.querySelector('#input_nombre').value,
+      pais_usuario:document.querySelector('#select_paises').value
+    }
+
+    if (!body_request.nombre_usuario.trim().length > 0 || !body_request.pais_usuario.trim().length > 0) {
+      alertify.error("Debe ingresar los datos solicitados");
+      return
+    }
+
+    const request = await fetch(apiUsuario+`editar_usuario/${session_usuario.id_usuario}`,{
+      method:"PUT",
+      headers:{
+        "Content-Type": "application/json",
+      },
+      body:JSON.stringify(body_request)
+
+    }).then(res => res.json())
+
+    if (request.completado) {
+
+      alertify.success("Datos actualizados!")
+
+      if (document.querySelector('#input_pfp').value != '') {
+        const form = document.querySelector('#form_perfil')
+        await ActualizarPFP(form)
+      }
+
+      await ActualizarSesion()
+
+    }else{
+      alertify.error("Ocurrió un error, por favor intentelo más tarde");
+    }
+
+  })
+
   document.getElementById("btnAgregarComentario").addEventListener("click", async () => {
-    const idUsuario = session_usuario.id_usuario || null 
-    const nombreUsuario = session_usuario.nombre_usuario || null 
+    const idUsuario = session_usuario != null ? session_usuario.id_usuario : null
+    const nombreUsuario = session_usuario != null ? session_usuario.nombre_usuario : null
     const comentario = document.getElementById("comentarioUsuario").value;
     const publicacionId = document.getElementById("comentarioModal").getAttribute("data-publicacion-id");
 
