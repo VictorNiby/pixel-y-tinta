@@ -56,7 +56,7 @@ function LoadNavBar(data_user) {
   }
 }
 
-async function FillComments(array) {
+async function FillComments(array,data_usuario) {
   let comentarios = await Promise.all(array.comentarios.map(async (comentario) => {
     const img_usuario = await fetch(apiUsuario + `listar_usuario/${comentario.id_usuario}`).then(res => res.json())
     return `
@@ -70,15 +70,25 @@ async function FillComments(array) {
                           <p class="mb-0 fw-bold text-info fs-5">@${
                             comentario.nombre_usuario
                           }</p>
-                          <button type="button" class="btn p-0 border-0 bg-transparent btnBorrarComentario" 
-                          data-id-comentario="${
-                            comentario._id
-                          }" 
-                          data-id-publicacion="${
-                            array._id
-                          }">
-                          <i class="bi bi-trash-fill text-secondary"></i>
-                          </button>
+
+                          ${data_usuario != null && data_usuario.id_usuario == comentario.id_usuario ? `
+                            
+                            <button type="button" class="btn p-0 border-0 bg-transparent btnBorrarComentario" 
+                              data-id-comentario="${
+                                comentario._id
+                              }" 
+                              data-id-publicacion="${
+                                array._id
+                              }">
+                              <i class="bi bi-trash-fill text-secondary"></i>
+                            </button>
+
+
+                            
+
+                            ` : ''
+                          }
+                          
                       </div>
                       <p class="mb-0 text-light fs-6">${
                         comentario.comentario_usuario
@@ -108,7 +118,7 @@ async function cargarTabla(data_usuario) {
 
         if (numComentarios > 0) {
 
-          comentariosHTML = await FillComments(publicacion)
+          comentariosHTML = await FillComments(publicacion,data_usuario)
          
         }else{
           comentariosHTML =
@@ -134,11 +144,19 @@ async function cargarTabla(data_usuario) {
                             <p class="mt-3 text-light">${
                               publicacion.contenido_publicacion
                             }</p>
+
                             ${
-                              publicacion.img_usuario != ''
-                              ? `<p class="mt-3 text-light">${publicacion.imagen_publicacion}</p>`
-                              : ""
+                              publicacion.imagen_publicacion != '' ? 
+                              `
+                                <img src="/back/uploads/post_pics/${publicacion.imagen_publicacion}" alt="Foto del post creado."
+                                  class="img-fluid"
+                                  
+                                >
+                              `
+                              : ''
+
                             }
+                            
                 
                             <div class="d-flex align-items-center gap-2">
                                 <button type="button" class="btn btn-outline-light position-relative modalComentario me-2" data-id="${
@@ -280,14 +298,6 @@ document.addEventListener('DOMContentLoaded',()=>{
     const contenido_publicacion = document.getElementById("contenido").value;
     const imagen_publicacion = document.getElementById("imagen").value;
     const form = document.getElementById("formPu");
-  //   const form_data = new FormData(form)
-  //   form_data.append("id",publicacion._id,)
-  //   form_data.append("imagen",imagen_publicacion)
-  //   const request = fetch(api + 'subir_imagen',{
-  //     method:"POST",
-  //     body: form_data
-  // }).then(res => res.json())
-  
 
     if (id_creador == null || nombre_creador == null) {
       alertify.error("Aun no has iniciado sesión");
@@ -299,7 +309,7 @@ document.addEventListener('DOMContentLoaded',()=>{
       return;
     }
   
-    
+   
   
     fetch(api + "crear_publicacion", {
       method: "POST",
@@ -315,17 +325,27 @@ document.addEventListener('DOMContentLoaded',()=>{
       }),
     })
     .then((res) => res.json())
-    .then((res) => {
+    .then(async(res) => {
         if (res.completado) {
           alertify.success("Publicación creada");
+
+          const form_data = new FormData(form)
+
+          await fetch(api+'subir_imagen',{
+            method:"POST",
+            body:form_data
+          })
+
           limpiarTabla();
           cargarTabla(session_usuario);
+          form.reset()
+          
         } else {
-          alertify.error("No se pudo completar la acción: ", res.mensaje);
+          alertify.error("No se pudo completar la acción: "+ res.mensaje);
         }
       })
     .catch((err) => {
-      alertify.error("Error al crear la publicacion: ", err);
+      alertify.error("Error al crear la publicacion: "+ err);
     })
   
   }

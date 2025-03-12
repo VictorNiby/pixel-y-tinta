@@ -26,6 +26,8 @@ const listar_publicacion = async (req, res) => {
     });
   }
 };
+
+
 const crear_publicacion = async (req, res) => {
   const {
     nombre_publicacion,
@@ -35,13 +37,18 @@ const crear_publicacion = async (req, res) => {
     estado_publicacion,
     imagen_publicacion,
   } = req.body;
+
+
   if (!nombre_publicacion || !id_creador || !contenido_publicacion || !nombre_creador) {
     return res.status(400).json({
       completado: false,
       mensaje: "Faltan campos obligatorios.",
     });
   }
+
+
   try {
+
     const nueva_publicacion = new publicacion({
       nombre_publicacion,
       id_creador,
@@ -50,12 +57,14 @@ const crear_publicacion = async (req, res) => {
       estado_publicacion: estado_publicacion || "publicado",
       imagen_publicacion,
     });
+
     await nueva_publicacion.save();
-    res.status(201).json({
-      completado: true,
-      mensaje: "Publicación creada correctamente.",
-      publicacion: nueva_publicacion,
-    });
+      res.status(201).json({
+        completado: true,
+        mensaje: "Publicación creada correctamente.",
+        publicacion: nueva_publicacion,
+      });
+    
   } catch (error) {
     res.status(500).json({
       completado: false,
@@ -254,10 +263,8 @@ const subir_imagen_publi = async (req, res) => {
     const { originalname, filename, path } = req.file;
     const extension = originalname.split(".").pop().toLowerCase();
 
-    // Validar extensión de la imagen
     const extensiones_validas = ["png", "jpg", "jpeg","gif"];
     if (!extensiones_validas.includes(extension)) {
-      // Eliminar archivo inválido
       fs.unlink(path); 
 
       return res.status(400).json({
@@ -266,28 +273,29 @@ const subir_imagen_publi = async (req, res) => {
       });
     }
 
-    const id_publicacion = req.body.id_publicacion
+    const ultimo_post = await publicacion.find({}).sort({_id:-1}).limit(1)|| null
 
-    if (id_publicacion == null) {
+    if (ultimo_post == null) {
       return res.status(400).json(
-          {
-              completado:false,
-              mensaje : "No se envío el id de la publicacion"
-          }
-      )
+        {
+          completado:false,
+          mensaje : "No se encontró el post"
+        }
+       )
     }
 
-    const publicacion_actualizada = await publicacion.findByIdAndUpdate(id_publicacion, {
-      imagen_publicacion: filename,
-    });
-
+    const id_post = ultimo_post[0]._id
     
-    if (publicacion_actualizada == null) {
+    const post_actualizado = await publicacion.findByIdAndUpdate(id_post,{
+      imagen_publicacion:filename
+    })
+    
+    if (post_actualizado == null) {
       return res.status(400).json(
-          {
-              completado:false,
-              mensaje : "No se encontró la publicacion"
-          }
+        {
+          completado:false,
+          mensaje : "No se pudo subir la imagen del post"
+        }
       )
     }
 
@@ -300,7 +308,7 @@ const subir_imagen_publi = async (req, res) => {
   } catch (error) {
     return res.status(500).json({
       completado: false,
-      mensaje: "Error al procesar la imagen"+error
+      mensaje: "Error al procesar la imagen: "+error
     });
   }
 

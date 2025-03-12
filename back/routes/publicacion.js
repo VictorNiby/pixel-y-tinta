@@ -17,7 +17,7 @@ const storage = multer.diskStorage({
     //estructura para denominar los archivos
     filename: (req, file, cb) => {
         //armamos el nombre del archivo
-        cb(null, Date.now() + "&banana&" + file.originalname);
+        cb(null, Date.now() + "-" + file.originalname);
     },
 });
 
