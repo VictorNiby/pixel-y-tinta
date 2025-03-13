@@ -27,7 +27,6 @@ const listar_publicacion = async (req, res) => {
   }
 };
 
-
 const crear_publicacion = async (req, res) => {
   const {
     nombre_publicacion,
@@ -323,5 +322,5 @@ module.exports = {
   crear_comentario,
   borrar_comentario_id,
   editar_comentario_id,
-  subir_imagen_publi
+  subir_imagen_publi,
 };

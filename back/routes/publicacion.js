@@ -59,4 +59,5 @@ router.post(
   "/publicacion/subir_imagen/",
 uploads.single("imagen"),control_publicacion.subir_imagen_publi
 );
+
 module.exports = router;

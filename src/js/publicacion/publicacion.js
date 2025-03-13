@@ -23,20 +23,32 @@ const paises = [
   "Yibuti", "Zambia", "Zimbabue"
 ];
 
-function FillModalPerfil(data_usuario) {
-  
-  document.querySelector('#input_nombre').value = data_usuario.nombre_usuario
+function FillModalPerfil() {
+  const data_usuario = JSON.parse(sessionStorage.getItem("sesion_usuario")) || null
 
-  document.querySelector('#img_pfp').setAttribute('src',`/back/uploads/pfp/${data_usuario.img_usuario}`)
-  paises.forEach((data)=>{
-      const option = document.createElement('option')
-      option.value = data
-      option.innerHTML = data
-      if (data_usuario.pais_usuario == data) {
-        option.setAttribute("selected","true")
-      }
-      document.querySelector('#select_paises').appendChild(option)
-  })
+  let empty_data = false
+
+  for(var key in data_usuario) {
+    if(data_usuario[key] === "") {
+       empty_data = true
+    }
+  }
+
+  if (data_usuario != null && !empty_data) {
+    document.querySelector('#input_nombre').value = data_usuario.nombre_usuario
+
+    document.querySelector('#img_pfp').setAttribute('src',`/back/uploads/pfp/${data_usuario.img_usuario}`)
+    paises.forEach((data)=>{
+        const option = document.createElement('option')
+        option.value = data
+        option.innerHTML = data
+        if (data_usuario.pais_usuario == data) {
+          option.setAttribute("selected","true")
+        }
+        document.querySelector('#select_paises').appendChild(option)
+    })
+  }
+  
 }
 
 function calcularTiempoTranscurrido(fechaISO) {
@@ -58,9 +70,17 @@ function calcularTiempoTranscurrido(fechaISO) {
   }
 }
 
-function LoadNavBar(data_user) {
+function LoadNavBar() {
+  const data_user = JSON.parse(sessionStorage.getItem("sesion_usuario")) || null
+  let empty_data = false
 
-  if (data_user != null) {
+  for(var key in data_user) {
+    if(data_user[key] === "") {
+       empty_data = true
+    }
+  }
+
+  if (data_user != null && !empty_data) {
     document.querySelector('#perfil').innerHTML = ''
     document.querySelector('#perfil').innerHTML = `
       <div class="dropdown">
@@ -96,22 +116,26 @@ function LoadNavBar(data_user) {
   }
 }
 
-async function FillComments(array,data_usuario) {
+async function FillComments(array) {
+
+  const data_sesion = JSON.parse(sessionStorage.getItem("sesion_usuario")) || null
+  const request = await fetch(apiUsuario+`listar_usuario/${data_sesion.id_usuario}`).then(res => res.json())
+
   let comentarios = await Promise.all(array.comentarios.map(async (comentario) => {
-    const img_usuario = await fetch(apiUsuario + `listar_usuario/${comentario.id_usuario}`).then(res => res.json())
+    const data_usuario = await fetch(apiUsuario + `listar_usuario/${comentario.id_usuario}`).then(res => res.json())
     return `
       <div class="card mb-3 border-0 rounded-4 shadow-sm" style="background-color: #2d3338; box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
           <div class="card-body p-4">
               <div class="d-flex align-items-start gap-3">
-                  <img src="/back/uploads/pfp/${img_usuario.resultado.img_usuario}" class="img-fluid" width=51px alt="Imagen de cada usuario"
+                  <img src="/back/uploads/pfp/${data_usuario.resultado.img_usuario}" class="img-fluid" width=51px alt="Imagen de cada usuario"
                   style="clip-path:circle()"></img>
                   <div class="flex-grow-1">
                       <div class="d-flex justify-content-between align-items-center mb-2">
                           <p class="mb-0 fw-bold text-info fs-5">@${
-                            comentario.nombre_usuario
+                            data_usuario.resultado.nombre_usuario
                           }</p>
 
-                          ${data_usuario != null && data_usuario.id_usuario == comentario.id_usuario ? `
+                          ${data_sesion.id_usuario == comentario.id_usuario ||( request.completado && request.resultado.is_admin) ? `
                             
                             <button type="button" class="btn p-0 border-0 bg-transparent btnBorrarComentario" 
                               data-id-comentario="${
@@ -119,12 +143,11 @@ async function FillComments(array,data_usuario) {
                               }" 
                               data-id-publicacion="${
                                 array._id
-                              }">
+                              }"
+                              
+                              >
                               <i class="bi bi-trash-fill text-secondary"></i>
                             </button>
-
-
-                            
 
                             ` : ''
                           }
@@ -144,7 +167,11 @@ async function FillComments(array,data_usuario) {
   return comentarios.join('')
 }
 
-async function cargarTabla(data_usuario) {
+async function cargarTabla() {
+  const data_usuario = JSON.parse(sessionStorage.getItem("sesion_usuario")) || null
+
+  const request = await fetch(apiUsuario + `listar_usuario/${data_usuario.id_usuario}`).then(res => res.json())
+
   await fetch(api + "listar_publicacion")
     .then((res) => res.json())
     .then((res) => {
@@ -226,10 +253,10 @@ async function cargarTabla(data_usuario) {
                                     </button>
                 
                                 ${
-                                  data_usuario != null && data_usuario.is_admin
+                                  request.completado && request.resultado.is_admin
                                     ? 
                                     `
-                                      <button class="btn btn-outline-light me-2 btnEditar" data-id="${publicacion._id}">
+                                      <button class="btn btn-outline-light me-2 btnEditar" data-id="${request.resultado._id}">
                                           <i class="bi bi-pencil-square"></i>
                                       </button>
                                       <button class="btn btn-outline-light btnBorrar" data-id="${publicacion._id}">
@@ -249,30 +276,7 @@ async function cargarTabla(data_usuario) {
         
       })
 
-      if (data_usuario != null && data_usuario.is_admin) {
-        document.querySelectorAll(".btnEditar").forEach((btn) => {
-          btn.addEventListener("click", (e) => {
-            const id = e.target.closest("button").getAttribute("data-id");
-            editarPublicacion(id);
-          });
-        });
-
-        document.querySelectorAll(".btnBorrar").forEach((btn) => {
-          btn.addEventListener("click", (e) => {
-            const id = e.target.closest("button").getAttribute("data-id");
-            eliminarPublicacion(id);
-          });
-        });
-
-        document.querySelectorAll(".btnBorrarComentario").forEach((btn) => {
-          btn.addEventListener("click", (e) => {
-            const idComentario = e.target.closest("button").getAttribute("data-id-comentario");
-            const id = e.target.closest("button").getAttribute("data-id-publicacion");
-            eliminarComentario(id, idComentario);
-          });
-
-        });
-      }
+      
 
     });
 }
@@ -330,7 +334,7 @@ async function ActualizarSesion() {
   data_session.pais_usuario = datos_usuario.resultado.pais_usuario
   data_session.img_usuario = datos_usuario.resultado.img_usuario
 
-  sessionStorage.removeItem('sesion_usuario')
+  sessionStorage.clear()
   sessionStorage.setItem('sesion_usuario',JSON.stringify(data_session))
 
   setTimeout(()=>{
@@ -352,22 +356,28 @@ async function ActualizarPFP(form) {
 
 }
 
-document.addEventListener('DOMContentLoaded',()=>{
-  const session_usuario = JSON.parse(sessionStorage.getItem("sesion_usuario")) || null
-  LoadNavBar(session_usuario)
-  cargarTabla(session_usuario)
+document.addEventListener('DOMContentLoaded',async()=>{
+  
+  LoadNavBar()
+  cargarTabla()
+  FillModalPerfil()
 
-  if (session_usuario != null) {
-    FillModalPerfil(session_usuario)
+  const data_usuario = JSON.parse(sessionStorage.getItem("sesion_usuario")) || null
+  const request = await fetch(apiUsuario + `listar_usuario/${data_usuario.id_usuario}`).then(res => res.json())
+
+  if (request.completado && request.resultado.is_admin) {
+    document.getElementById("hagaloPapi").addEventListener("click", crearPublicacion);
+  }else{
+    document.querySelector('#section_publicar').remove()
   }
   
-  document.getElementById("hagaloPapi").addEventListener("click", crearPublicacion);
-
   function crearPublicacion(e) {
+    const nueva_sesion = JSON.parse(sessionStorage.getItem("sesion_usuario")) || null
+
     e.preventDefault();
     const nombre_publicacion = document.getElementById("titulo").value;
-    const id_creador = session_usuario != null ? session_usuario.id_usuario : null;
-    const nombre_creador = session_usuario != null ? session_usuario.nombre_usuario : null;
+    const id_creador = nueva_sesion != null && nueva_sesion.id_usuario ? nueva_sesion.id_usuario : null;
+    const nombre_creador = nueva_sesion != null && nueva_sesion.nombre_usuario ? nueva_sesion.nombre_usuario : null;
     const contenido_publicacion = document.getElementById("contenido").value;
     const imagen_publicacion = document.getElementById("imagen").value;
     const form = document.getElementById("formPu");
@@ -381,8 +391,6 @@ document.addEventListener('DOMContentLoaded',()=>{
       alertify.error("Llena todos los campos");
       return;
     }
-  
-   
   
     fetch(api + "crear_publicacion", {
       method: "POST",
@@ -410,7 +418,7 @@ document.addEventListener('DOMContentLoaded',()=>{
           })
 
           limpiarTabla();
-          cargarTabla(session_usuario);
+          cargarTabla();
           form.reset()
           
         } else {
@@ -439,13 +447,13 @@ document.addEventListener('DOMContentLoaded',()=>{
   })
 
   document.querySelector('#modal_perfil').addEventListener('hidden.bs.modal', () => {
-    FillModalPerfil(session_usuario)
+    FillModalPerfil()
   })
 
   document.querySelector('#form_perfil').addEventListener('submit',async(e)=>{
     e.preventDefault()
-    console.log(document.querySelector('#input_pfp').value);
-    
+    const session_usuario = JSON.parse(sessionStorage.getItem("sesion_usuario")) || null
+
     const body_request = {
       nombre_usuario:document.querySelector('#input_nombre').value,
       pais_usuario:document.querySelector('#select_paises').value
@@ -483,8 +491,11 @@ document.addEventListener('DOMContentLoaded',()=>{
   })
 
   document.getElementById("btnAgregarComentario").addEventListener("click", async () => {
-    const idUsuario = session_usuario != null ? session_usuario.id_usuario : null
-    const nombreUsuario = session_usuario != null ? session_usuario.nombre_usuario : null
+
+    const session_usuario = JSON.parse(sessionStorage.getItem("sesion_usuario")) || null
+
+    const idUsuario = session_usuario != null && session_usuario.id_usuario ? session_usuario.id_usuario : null
+    const nombreUsuario = session_usuario != null && session_usuario.nombre_usuario ? session_usuario.nombre_usuario : null
     const comentario = document.getElementById("comentarioUsuario").value;
     const publicacionId = document.getElementById("comentarioModal").getAttribute("data-publicacion-id");
 
@@ -529,7 +540,7 @@ document.addEventListener('DOMContentLoaded',()=>{
     }
   });
 
-  document.addEventListener("click", (e) => {
+  document.addEventListener("click", async(e) => {
     if (e.target.closest(".btn-toggle-comentarios")) {
       const publicacionId = e.target.closest("button").getAttribute("data-id");
       const comentariosContainer = document.getElementById(
@@ -550,9 +561,7 @@ document.addEventListener('DOMContentLoaded',()=>{
     if (e.target.closest(".modalComentario")) {
       const publicacionId = e.target.closest(".modalComentario").getAttribute("data-id");
       document.getElementById("comentarioModal").setAttribute("data-publicacion-id", publicacionId);
-      const modal = new bootstrap.Modal(
-        document.getElementById("comentarioModal")
-      );
+      const modal = new bootstrap.Modal(document.getElementById("comentarioModal"));
       modal.show();
     }
 
@@ -562,8 +571,34 @@ document.addEventListener('DOMContentLoaded',()=>{
       eliminarComentario(id_publicacion, id_comentario);
     }
 
+    if (e.target.closest(".btnEditar")) {
+      const data_usuario = JSON.parse(sessionStorage.getItem("sesion_usuario")) || null
+      const request = await fetch(apiUsuario + `listar_usuario/${data_usuario.id_usuario}`).then(res => res.json())
+      if (request.completado && request.resultado.is_admin) {
+        const id = e.target.closest("button").getAttribute("data-id");
+        editarPublicacion(id);
+      }else{
+        alertify.error("No tienes permisos para eso")
+      }
+      
+    }
+
+    if(e.target.closest(".btnBorrar")) {
+      const data_usuario = JSON.parse(sessionStorage.getItem("sesion_usuario")) || null
+      const request = await fetch(apiUsuario + `listar_usuario/${data_usuario.id_usuario}`).then(res => res.json())
+
+      if (request.completado && request.resultado.is_admin) {
+        const id = e.target.closest("button").getAttribute("data-id");
+        eliminarPublicacion(id);
+      }else{
+        alertify.error("No tienes permisos para eso")
+      }
+      
+    };
+
+
     if (e.target.closest("#log_out")) {
-      sessionStorage.clear("sesion_usuario")
+      sessionStorage.clear()
     }
 
   });

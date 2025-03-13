@@ -229,7 +229,6 @@ const log_in = async (req,resp)=>{
                     img_usuario :usuario_existe.img_usuario,
                     fecha_nacimiento :usuario_existe.fecha_nacimiento,
                     pais_usuario :usuario_existe.pais_usuario,
-                    is_admin: usuario_existe.is_admin
                 },
                 "seCreTo",
                 {expiresIn:"30m"}

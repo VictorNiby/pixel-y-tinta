@@ -47,10 +47,6 @@ const publicacion_schema = Schema(
           type:String,
           required:true
         },
-        nombre_usuario: {
-          type: String,
-          required: true,
-        },
         comentario_usuario: {
           type: String,
           required: true,
