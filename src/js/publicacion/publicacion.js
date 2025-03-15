@@ -168,120 +168,104 @@ async function FillComments(array) {
 }
 
 async function cargarTabla() {
-  const data_usuario = JSON.parse(sessionStorage.getItem("sesion_usuario")) || null
+  const data_usuario = JSON.parse(sessionStorage.getItem("sesion_usuario")) || null;
 
-  
-  const request = data_usuario != null ? await fetch(apiUsuario + `listar_usuario/${data_usuario.id_usuario}`).then(res => res.json()) : null
-  
+  const request = await fetch(apiUsuario + `listar_usuario/${data_usuario.id_usuario}`).then(res => res.json());
 
   await fetch(api + "listar_publicacion")
     .then((res) => res.json())
     .then((res) => {
-        const div = document.getElementById("publicaciones");
-        res.publicaciones.forEach(async(publicacion) => {
-        const nombre_creador = publicacion.nombre_creador
+      const div = document.getElementById("publicaciones");
+      res.publicaciones.forEach(async (publicacion) => {
+        const nombre_creador = publicacion.nombre_creador;
         const tiempoTranscurrido = calcularTiempoTranscurrido(publicacion.fecha_publicacion);
         const numComentarios = publicacion.comentarios.length;
-        let comentariosHTML = ""
+        let comentariosHTML = "";
 
         if (numComentarios > 0) {
-
-          comentariosHTML = await FillComments(publicacion,data_usuario)
-         
-        }else{
-          comentariosHTML =
-          ` 
+          comentariosHTML = await FillComments(publicacion, data_usuario);
+        } else {
+          comentariosHTML = `
             <p class="text-center text-muted fs-5 py-4">No hay comentarios aún. Sé el primero en comentar.</p>
-          `
+          `;
         }
 
         div.innerHTML += `
-                    <section class="card mb-4">
-                        <div class="card-body">
-                            <header class="d-flex justify-content-between">
-                                <div class="d-flex align-items-center gap-2">
-                                    <span class="fw-bold text-light">@${
-                                      nombre_creador
-                                    } :</span>
-                                    <span class="text-light">${
-                                      publicacion.nombre_publicacion
-                                    }</span>
-                                </div>
-                                <span class="text-muted text-white">${tiempoTranscurrido}</span>
-                            </header>
-                            <p class="mt-3 text-light">${
-                              publicacion.contenido_publicacion
-                            }</p>
+          <section class="card mb-4">
+            <div class="card-body">
+              <header class="d-flex justify-content-between">
+                <div class="d-flex align-items-center gap-2">
+                  <span class="fw-bold text-light">@${nombre_creador} :</span>
+                  <span class="text-light">${publicacion.nombre_publicacion}</span>
+                </div>
+                <span class="text-muted text-white">${tiempoTranscurrido}</span>
+              </header>
+              <p class="mt-3 text-light">${publicacion.contenido_publicacion}</p>
 
-                            ${
-                              publicacion.imagen_publicacion != '' ? 
-                              `
-                                <img src="/back/uploads/post_pics/${publicacion.imagen_publicacion}" alt="Foto del post creado."
-                                  class="img-fluid"
-                                  
-                                >
-                              `
-                              : ''
+              ${
+                publicacion.imagen_publicacion
+                  ? `
+                    <div class="text-center mb-4">
+                      <a href="/back/uploads/post_pics/${publicacion.imagen_publicacion}" target="_blank">
+                        <img src="/back/uploads/post_pics/${publicacion.imagen_publicacion}" 
+                             alt="Foto del post creado." class="img-fluid post-image">
+                      </a>
+                    </div>
+                  `
+                  : ''
+              }
 
-                            }
-                            
-                
-                            <div class="d-flex align-items-center gap-2">
-                                <button type="button" class="btn btn-outline-light position-relative modalComentario me-2" data-id="${
-                                  publicacion._id
-                                }">
-                                <i class="bi bi-chat"></i>
-                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary">
-                                    ${numComentarios}
-                                    <span class="visually-hidden">número de comentarios</span>
-                                </span>
-                                </button>
+              <div class="d-flex align-items-center gap-2">
+                <button type="button" class="btn btn-outline-light position-relative modalComentario me-2" data-id="${publicacion._id}">
+                  <i class="bi bi-chat"></i>
+                  <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary">
+                    ${numComentarios}
+                    <span class="visually-hidden">número de comentarios</span>
+                  </span>
+                </button>
 
-                                ${
-                                  numComentarios == 0
-                                    ? ""
-                                    : `
-                                    <button class="btn btn-outline-light btn-toggle-comentarios me-2" data-id="${publicacion._id}">
-                                    <i class="bi bi-chevron-down"></i>
-                                    </button>`
-                                }
+                ${
+                  numComentarios == 0
+                    ? ""
+                    : `<button class="btn btn-outline-light btn-toggle-comentarios me-2" data-id="${publicacion._id}">
+                         <i class="bi bi-chevron-down"></i>
+                       </button>`
+                }
 
-                                    <button type="button" class="btn btn-outline-light position-relative me-2" data-id="">
-                                    <i class="bi bi-heart"></i>
-                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary">
-                                        ${publicacion.likes}
-                                        <span class="visually-hidden">número de likes</span>
-                                    </span>
-                                    </button>
-                
-                                ${
-                                  request !== null && request.completado && request.resultado.is_admin
-                                    ? 
-                                    `
-                                      <button class="btn btn-outline-light me-2 btnEditar" data-id="${request.resultado._id}">
-                                          <i class="bi bi-pencil-square"></i>
-                                      </button>
-                                      <button class="btn btn-outline-light btnBorrar" data-id="${publicacion._id}">
-                                          <i class="bi bi-trash-fill"></i>
-                                      </button>
-                                    `
-                                    : ""
-                                }
-                            </div>
-                
-                            <div class="comentarios-container mt-4" id="comentarios-${publicacion._id}" style="display: none;">
-                                ${comentariosHTML}
-                            </div>
-                        </div>
-                    </section>
-          `
-        
-      })
+                <button type="button" class="btn btn-outline-light position-relative me-2" data-id="">
+                  <i class="bi bi-heart"></i>
+                  <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary">
+                    ${publicacion.likes}
+                    <span class="visually-hidden">número de likes</span>
+                  </span>
+                </button>
 
-      
+                ${
+                  request.completado && request.resultado.is_admin
+                    ? `
+                      <button class="btn btn-outline-light me-2 btnEditar" data-id="${request.resultado._id}">
+                        <i class="bi bi-pencil-square"></i>
+                      </button>
+                      <button class="btn btn-outline-light btnBorrar" data-id="${publicacion._id}">
+                        <i class="bi bi-trash-fill"></i>
+                      </button>
+                    `
+                    : ""
+                }
+              </div>
 
+              <div class="comentarios-container mt-4" id="comentarios-${publicacion._id}" style="display: none;">
+                ${comentariosHTML}
+              </div>
+            </div>
+          </section>
+        `;
+      });
     });
 }
+
+
+
 
 function eliminarComentario(id, parametro) {
   alertify.confirm(
@@ -327,6 +311,40 @@ function limpiarTabla() {
   const contenedor = document.getElementById("publicaciones");
   contenedor.innerHTML = "";
 }
+
+async function tomaLike(id) {
+  const data_usuario = JSON.parse(sessionStorage.getItem("sesion_usuario")) || null;
+  if (!data_usuario) {
+    alertify.error("Debes iniciar sesión para dar like.");
+    return;
+  }
+
+  const btnLike = document.querySelector(`[data-id="${id}"].btn-like`);
+  const numLikesSpan = btnLike.querySelector("span");
+
+  let esLike = !btnLike.classList.contains("liked");
+
+  try {
+    const response = await fetch(api + `publicacion/${esLike ? "like" : "dislike"}/${id}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ usuarioId: data_usuario.id_usuario }),
+    });
+
+    const data = await response.json();
+
+    if (data.estado) {
+      btnLike.classList.toggle("liked", esLike);
+      numLikesSpan.textContent = data.publicacion.likes.length;
+      alertify.success(esLike ? "Like agregado" : "Like eliminado");
+    } else {
+      alertify.error(data.mensaje);
+    }
+  } catch (error) {
+    alertify.error("Error al actualizar el like.");
+  }
+}
+
 
 async function ActualizarSesion() {
   const data_session = JSON.parse(sessionStorage.getItem("sesion_usuario"))
