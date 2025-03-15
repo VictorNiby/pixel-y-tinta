@@ -170,7 +170,9 @@ async function FillComments(array) {
 async function cargarTabla() {
   const data_usuario = JSON.parse(sessionStorage.getItem("sesion_usuario")) || null
 
-  const request = await fetch(apiUsuario + `listar_usuario/${data_usuario.id_usuario}`).then(res => res.json())
+  
+  const request = data_usuario != null ? await fetch(apiUsuario + `listar_usuario/${data_usuario.id_usuario}`).then(res => res.json()) : null
+  
 
   await fetch(api + "listar_publicacion")
     .then((res) => res.json())
@@ -253,7 +255,7 @@ async function cargarTabla() {
                                     </button>
                 
                                 ${
-                                  request.completado && request.resultado.is_admin
+                                  request !== null && request.completado && request.resultado.is_admin
                                     ? 
                                     `
                                       <button class="btn btn-outline-light me-2 btnEditar" data-id="${request.resultado._id}">
@@ -363,9 +365,9 @@ document.addEventListener('DOMContentLoaded',async()=>{
   FillModalPerfil()
 
   const data_usuario = JSON.parse(sessionStorage.getItem("sesion_usuario")) || null
-  const request = await fetch(apiUsuario + `listar_usuario/${data_usuario.id_usuario}`).then(res => res.json())
+  const request = data_usuario !== null ? await fetch(apiUsuario + `listar_usuario/${data_usuario.id_usuario}`).then(res => res.json()) : null
 
-  if (request.completado && request.resultado.is_admin) {
+  if (request !== null && request.completado && request.resultado.is_admin) {
     document.getElementById("hagaloPapi").addEventListener("click", crearPublicacion);
   }else{
     document.querySelector('#section_publicar').remove()
