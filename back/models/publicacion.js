@@ -37,10 +37,17 @@ const publicacion_schema = Schema(
       enum: ["publicado", "archivado", "editado"],
       default: "publicado",
     },
-    likes: {
-      type: Number,
-      default: 0,
-    },
+    likes: [
+      {
+        id_usuario:{
+          type:String,
+          required:true
+        },
+        liked:{
+          type:Boolean,
+          default:false
+        }
+      }],
     comentarios: [
       {
         id_usuario :{

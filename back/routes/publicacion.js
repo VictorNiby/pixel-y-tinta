@@ -9,7 +9,8 @@
 const express = require("express");
 const router = express.Router();
 const control_publicacion = require("../controllers/publicacion");
-const multer = require('multer')
+const multer = require('multer');
+const publicacion = require("../models/publicacion");
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -59,5 +60,17 @@ router.post(
   "/publicacion/subir_imagen/",
 uploads.single("imagen"),control_publicacion.subir_imagen_publi
 );
+
+router.post(
+  "/publicacion/actualizar_likes",
+  control_publicacion.update_likes
+);
+
+router.get(
+  "/publicacion/count_likes/:id_publicacion",control_publicacion.count_likes
+)
+router.post(
+  "/publicacion/user_liked_post",control_publicacion.user_liked_post
+)
 
 module.exports = router;

@@ -313,6 +313,129 @@ const subir_imagen_publi = async (req, res) => {
 
 };
 
+const update_likes = async (req,res)=>{
+  const {id_publicacion,id_usuario}= req.body
+
+  if (!id_publicacion) {
+    return res.status(400).json({
+      message : "No se envió el id de la publicación"
+    })
+  }
+
+  try{
+
+    const userLikedPost = await publicacion.find({"_id":id_publicacion,"likes.id_usuario":id_usuario})
+    
+    if (userLikedPost.length === 0) {
+      await publicacion.findByIdAndUpdate(id_publicacion,
+        {"$push":
+          {likes:
+            {id_usuario:id_usuario,liked:true}
+          }
+        },
+      {new:true}
+      )
+
+      return res.status(200).json({
+        userLikedPost:true
+      })
+
+    }else{
+
+      const postLikedByUser = await publicacion.find({"_id":id_publicacion,"likes.id_usuario":id_usuario,"likes.liked":false})
+
+      switch (postLikedByUser.length) {
+        case 0:
+          await publicacion.updateOne({"_id":id_publicacion,"likes.id_usuario":id_usuario},
+            {
+              "likes.$.liked":false
+            }
+          )
+          return res.status(200).json({
+            userLikedPost:false
+          })
+
+        case 1:
+          await publicacion.updateOne({"_id":id_publicacion,"likes.id_usuario":id_usuario},
+            {
+              "likes.$.liked":true
+            }
+          )
+
+          return res.status(200).json({
+            userLikedPost:true
+          })
+          
+      }
+
+    }
+    
+  }catch(error){
+    return res.status(400).send({
+      message:"No se pudo actualizar la publicación: "+error
+    })
+
+  }
+}
+
+const count_likes = async (req,res)=>{
+  const {id_publicacion} = req.params
+  if(!id_publicacion){
+    return res.status(400).json({
+      message:"No se encontró la publicación."
+    })
+  }
+
+  try {
+    const post = await publicacion.findById(id_publicacion)
+
+    let numberOfLikes = 0
+
+    post.likes.forEach(data => {
+      if (data.liked) {
+        numberOfLikes += 1
+      }
+    });
+    
+    
+    return res.status(200).json({
+      data:numberOfLikes
+    })
+
+
+  } catch (error) {
+    return res.status(400).json({
+      message:"Ocurrió un error: "+error
+    })
+  }
+  
+
+  
+}
+
+const user_liked_post = async (req,res)=>{
+  const {id_usuario,id_publicacion} = req.body
+
+  if (!id_usuario || !id_publicacion) {
+    return res.status(400).json({
+      message:"No se enviaron los datos solicitados"
+    })
+  }
+
+  const userLikedPost = await publicacion.find({"_id":id_publicacion,"likes.id_usuario":id_usuario,"likes.liked":true})
+
+  if (userLikedPost.length > 0) {
+    return res.status(200).json({
+      userLikedPost:true
+    })
+  }
+
+  return res.status(200).json({
+    userLikedPost:false
+  })
+}
+
+
 module.exports = {
   listar_publicacion,
   crear_publicacion,
@@ -323,4 +446,7 @@ module.exports = {
   borrar_comentario_id,
   editar_comentario_id,
   subir_imagen_publi,
+  update_likes,
+  count_likes,
+  user_liked_post
 };

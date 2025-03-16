@@ -1,3 +1,4 @@
+
 const api = "http://127.0.0.1:4000/api/publicacion/";
 const apiUsuario = "http://127.0.0.1:4000/api/usuarios/";
 const paises = [
@@ -119,9 +120,10 @@ function LoadNavBar() {
 async function FillComments(array) {
 
   const data_sesion = JSON.parse(sessionStorage.getItem("sesion_usuario")) || null
-  const request = await fetch(apiUsuario+`listar_usuario/${data_sesion.id_usuario}`).then(res => res.json())
+  const request = data_sesion !== null ? await fetch(apiUsuario+`listar_usuario/${data_sesion.id_usuario}`).then(res => res.json())
+  : null
 
-  let comentarios = await Promise.all(array.comentarios.map(async (comentario) => {
+  const comentarios = await Promise.all(array.comentarios.map(async (comentario) => {
     const data_usuario = await fetch(apiUsuario + `listar_usuario/${comentario.id_usuario}`).then(res => res.json())
     return `
       <div class="card mb-3 border-0 rounded-4 shadow-sm" style="background-color: #2d3338; box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
@@ -135,7 +137,7 @@ async function FillComments(array) {
                             data_usuario.resultado.nombre_usuario
                           }</p>
 
-                          ${data_sesion.id_usuario == comentario.id_usuario ||( request.completado && request.resultado.is_admin) ? `
+                          ${data_sesion !== null && (data_sesion.id_usuario == comentario.id_usuario ||( request.completado && request.resultado.is_admin) )? `
                             
                             <button type="button" class="btn p-0 border-0 bg-transparent btnBorrarComentario" 
                               data-id-comentario="${
@@ -170,7 +172,8 @@ async function FillComments(array) {
 async function cargarTabla() {
   const data_usuario = JSON.parse(sessionStorage.getItem("sesion_usuario")) || null;
 
-  const request = await fetch(apiUsuario + `listar_usuario/${data_usuario.id_usuario}`).then(res => res.json());
+  const request = data_usuario !== null ? await fetch(apiUsuario + `listar_usuario/${data_usuario.id_usuario}`).then(res => res.json()) : null;
+
 
   await fetch(api + "listar_publicacion")
     .then((res) => res.json())
@@ -182,6 +185,17 @@ async function cargarTabla() {
         const numComentarios = publicacion.comentarios.length;
         let comentariosHTML = "";
 
+        const request_liked_post = data_usuario != null ? await fetch(api + `user_liked_post`,{
+          method:"POST",
+          headers:{
+            "Content-Type":"application/json"
+          },
+          body:JSON.stringify({id_usuario: data_usuario.id_usuario,id_publicacion: publicacion._id})
+        }).then(res => res.json()) : null
+
+
+        const cant_likes = await fetch(api+`count_likes/${publicacion._id}`).then(res => res.json())
+
         if (numComentarios > 0) {
           comentariosHTML = await FillComments(publicacion, data_usuario);
         } else {
@@ -189,7 +203,7 @@ async function cargarTabla() {
             <p class="text-center text-muted fs-5 py-4">No hay comentarios aún. Sé el primero en comentar.</p>
           `;
         }
-
+        
         div.innerHTML += `
           <section class="card mb-4">
             <div class="card-body">
@@ -232,16 +246,16 @@ async function cargarTabla() {
                        </button>`
                 }
 
-                <button type="button" class="btn btn-outline-light position-relative me-2" data-id="">
-                  <i class="bi bi-heart"></i>
+                <button type="button" id="btnLikes" class="btn btn-outline-light position-relative me-2" data-id="${publicacion._id}">
+                  <i id="likes_icon" class="bi ${request_liked_post!=null && request_liked_post.userLikedPost ? `bi-heart-fill` : "bi-heart"}"></i>
                   <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary">
-                    ${publicacion.likes}
-                    <span class="visually-hidden">número de likes</span>
+                    ${cant_likes.data}
+                    
                   </span>
                 </button>
 
                 ${
-                  request.completado && request.resultado.is_admin
+                  request !== null && request.completado && request.resultado.is_admin
                     ? `
                       <button class="btn btn-outline-light me-2 btnEditar" data-id="${request.resultado._id}">
                         <i class="bi bi-pencil-square"></i>
@@ -260,12 +274,10 @@ async function cargarTabla() {
             </div>
           </section>
         `;
+
       });
     });
 }
-
-
-
 
 function eliminarComentario(id, parametro) {
   alertify.confirm(
@@ -311,40 +323,6 @@ function limpiarTabla() {
   const contenedor = document.getElementById("publicaciones");
   contenedor.innerHTML = "";
 }
-
-async function tomaLike(id) {
-  const data_usuario = JSON.parse(sessionStorage.getItem("sesion_usuario")) || null;
-  if (!data_usuario) {
-    alertify.error("Debes iniciar sesión para dar like.");
-    return;
-  }
-
-  const btnLike = document.querySelector(`[data-id="${id}"].btn-like`);
-  const numLikesSpan = btnLike.querySelector("span");
-
-  let esLike = !btnLike.classList.contains("liked");
-
-  try {
-    const response = await fetch(api + `publicacion/${esLike ? "like" : "dislike"}/${id}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ usuarioId: data_usuario.id_usuario }),
-    });
-
-    const data = await response.json();
-
-    if (data.estado) {
-      btnLike.classList.toggle("liked", esLike);
-      numLikesSpan.textContent = data.publicacion.likes.length;
-      alertify.success(esLike ? "Like agregado" : "Like eliminado");
-    } else {
-      alertify.error(data.mensaje);
-    }
-  } catch (error) {
-    alertify.error("Error al actualizar el like.");
-  }
-}
-
 
 async function ActualizarSesion() {
   const data_session = JSON.parse(sessionStorage.getItem("sesion_usuario"))
@@ -432,11 +410,13 @@ document.addEventListener('DOMContentLoaded',async()=>{
 
           const form_data = new FormData(form)
 
-          await fetch(api+'subir_imagen',{
-            method:"POST",
-            body:form_data
-          })
-
+          if(imagen_publicacion){
+            await fetch(api+'subir_imagen',{
+              method:"POST",
+              body:form_data
+            })
+          }
+        
           limpiarTabla();
           cargarTabla();
           form.reset()
@@ -593,8 +573,10 @@ document.addEventListener('DOMContentLoaded',async()=>{
 
     if (e.target.closest(".btnEditar")) {
       const data_usuario = JSON.parse(sessionStorage.getItem("sesion_usuario")) || null
-      const request = await fetch(apiUsuario + `listar_usuario/${data_usuario.id_usuario}`).then(res => res.json())
-      if (request.completado && request.resultado.is_admin) {
+      const request = data_usuario !== null ? await fetch(apiUsuario + `listar_usuario/${data_usuario.id_usuario}`)
+      .then(res => res.json()) : null
+
+      if (request !== null && request.completado && request.resultado.is_admin) {
         const id = e.target.closest("button").getAttribute("data-id");
         editarPublicacion(id);
       }else{
@@ -605,20 +587,72 @@ document.addEventListener('DOMContentLoaded',async()=>{
 
     if(e.target.closest(".btnBorrar")) {
       const data_usuario = JSON.parse(sessionStorage.getItem("sesion_usuario")) || null
-      const request = await fetch(apiUsuario + `listar_usuario/${data_usuario.id_usuario}`).then(res => res.json())
+      const request = data_usuario !== null ? await fetch(apiUsuario + `listar_usuario/${data_usuario.id_usuario}`)
+      .then(res => res.json()) : null
 
-      if (request.completado && request.resultado.is_admin) {
+      if (request!= null && request.completado && request.resultado.is_admin) {
         const id = e.target.closest("button").getAttribute("data-id");
         eliminarPublicacion(id);
       }else{
         alertify.error("No tienes permisos para eso")
       }
       
-    };
+    }
 
 
     if (e.target.closest("#log_out")) {
       sessionStorage.clear()
+    }
+
+    if (e.target.closest("#btnLikes")) {
+      const data_usuario = JSON.parse(sessionStorage.getItem("sesion_usuario")) || null
+      let empty_data = false
+
+      for(var key in data_usuario) {
+        if(data_usuario[key] === "") {
+          empty_data = true
+        }
+      }
+
+      if (!empty_data) {
+        const id_publicacion = e.target.closest("button").getAttribute("data-id");
+        const id_usuario = data_usuario.id_usuario
+
+        const request = await fetch(api + "actualizar_likes",{
+          method:"POST",
+          headers:{
+            "Content-Type":"application/json"
+          },
+          body: JSON.stringify({id_publicacion: id_publicacion,id_usuario:id_usuario})
+        }).then(res => res.json())
+
+        request.userLikedPost ? alertify.success('Usuario dio like') : alertify.error('Usuario canceló like')
+
+        const icon_like = e.target.closest("#btnLikes").firstElementChild
+        const span_likes = e.target.closest("#btnLikes").lastElementChild
+        const cant_likes = parseInt(span_likes.innerText)
+
+        switch (request.userLikedPost) {
+          case true:
+            icon_like.classList.remove('bi-heart')
+            icon_like.classList.add('bi-heart-fill')
+            span_likes.innerHTML = `${cant_likes + 1}`
+
+            break;
+        
+          default:
+            icon_like.classList.remove('bi-heart-fill')
+            icon_like.classList.add('bi-heart')
+            span_likes.innerHTML = `${cant_likes - 1}`
+            break;
+        }
+        return
+
+      }
+
+      alertify.error("No has iniciado sesión")
+      return
+
     }
 
   });
