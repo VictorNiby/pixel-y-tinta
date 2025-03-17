@@ -113,10 +113,6 @@
                 </select>
               </div>
     
-              <div class="mb-3 text-center">
-                <a href="#" class="text-decoration-none text-info fw-semibold">Cambiar contraseña</a>
-              </div>
-    
               <div class="modal-footer border-0 d-flex justify-content-between">
                 <button type="button" class="btn btn-outline-light rounded-pill px-4 py-2" data-bs-dismiss="modal">Cerrar</button>
                 <button type="submit" class="btn btn-success rounded-pill px-4 py-2" id="btn_editar_perfil">Guardar Cambios</button>
@@ -126,7 +122,6 @@
         </div>
       </div>
     </div>
-
 
         <!-- Modal para agregar comentarios -->
         <div class="modal fade" id="comentarioModal" tabindex="-1" aria-labelledby="comentarioModalLabel" aria-hidden="true">
@@ -140,7 +135,12 @@
                         <form id="formComentario">
                             <div class="mb-3">
                                 <label for="comentarioUsuario" class="form-label">Comentario</label>
-                                <textarea class="form-control" id="comentarioUsuario" rows="3" required></textarea>
+                                <textarea
+                                  class="form-control"
+                                  id="comentarioUsuario"
+                                  rows="3"
+                                  placeholder="¿Qué estás pensando?"
+                                ></textarea>
                             </div>
                         </form>
                     </div>
@@ -180,6 +180,8 @@
                       </div>
                   </div>
           </div>
+
+
     </div>
 
     <script src="../src/js/publicacion/publicacion.js"></script>
