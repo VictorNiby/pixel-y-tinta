@@ -43,10 +43,7 @@ const publicacion_schema = Schema(
           type:String,
           required:true
         },
-        liked:{
-          type:Boolean,
-          default:false
-        }
+
       }],
     comentarios: [
       {

@@ -26,7 +26,6 @@ const listar_publicacion = async (req, res) => {
     });
   }
 };
-
 const crear_publicacion = async (req, res) => {
   const {
     nombre_publicacion,
@@ -247,7 +246,6 @@ const editar_comentario_id = async (req, res) => {
     });
   }
 };
-
 const subir_imagen_publi = async (req, res) => {
 
   try {
@@ -342,31 +340,13 @@ const update_likes = async (req,res)=>{
 
     }else{
 
-      const postLikedByUser = await publicacion.find({"_id":id_publicacion,"likes.id_usuario":id_usuario,"likes.liked":false})
+      userLikedPost[0].likes = userLikedPost[0].likes.filter((like) => like.id_usuario !== id_usuario);
 
-      switch (postLikedByUser.length) {
-        case 0:
-          await publicacion.updateOne({"_id":id_publicacion,"likes.id_usuario":id_usuario},
-            {
-              "likes.$.liked":false
-            }
-          )
-          return res.status(200).json({
-            userLikedPost:false
-          })
-
-        case 1:
-          await publicacion.updateOne({"_id":id_publicacion,"likes.id_usuario":id_usuario},
-            {
-              "likes.$.liked":true
-            }
-          )
-
-          return res.status(200).json({
-            userLikedPost:true
-          })
-          
-      }
+      userLikedPost[0].save()
+      
+      return res.status(200).json({
+        userLikedPost:false
+      })
 
     }
     
@@ -387,19 +367,10 @@ const count_likes = async (req,res)=>{
   }
 
   try {
-    const post = await publicacion.findById(id_publicacion)
+    const post = await publicacion.find({"_id":id_publicacion})
 
-    let numberOfLikes = 0
-
-    post.likes.forEach(data => {
-      if (data.liked) {
-        numberOfLikes += 1
-      }
-    });
-    
-    
     return res.status(200).json({
-      data:numberOfLikes
+      data:post[0].likes.length
     })
 
 
@@ -408,8 +379,6 @@ const count_likes = async (req,res)=>{
       message:"Ocurrió un error: "+error
     })
   }
-  
-
   
 }
 
@@ -422,7 +391,7 @@ const user_liked_post = async (req,res)=>{
     })
   }
 
-  const userLikedPost = await publicacion.find({"_id":id_publicacion,"likes.id_usuario":id_usuario,"likes.liked":true})
+  const userLikedPost = await publicacion.find({"_id":id_publicacion,"likes.id_usuario":id_usuario})
 
   if (userLikedPost.length > 0) {
     return res.status(200).json({

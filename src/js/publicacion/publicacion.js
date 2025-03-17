@@ -614,7 +614,7 @@ document.addEventListener('DOMContentLoaded',async()=>{
         }
       }
 
-      if (!empty_data) {
+      if (data_usuario !== null && !empty_data) {
         const id_publicacion = e.target.closest("button").getAttribute("data-id");
         const id_usuario = data_usuario.id_usuario
 
@@ -626,8 +626,6 @@ document.addEventListener('DOMContentLoaded',async()=>{
           body: JSON.stringify({id_publicacion: id_publicacion,id_usuario:id_usuario})
         }).then(res => res.json())
 
-        request.userLikedPost ? alertify.success('Usuario dio like') : alertify.error('Usuario canceló like')
-
         const icon_like = e.target.closest("#btnLikes").firstElementChild
         const span_likes = e.target.closest("#btnLikes").lastElementChild
         const cant_likes = parseInt(span_likes.innerText)
@@ -637,7 +635,6 @@ document.addEventListener('DOMContentLoaded',async()=>{
             icon_like.classList.remove('bi-heart')
             icon_like.classList.add('bi-heart-fill')
             span_likes.innerHTML = `${cant_likes + 1}`
-
             break;
         
           default:
