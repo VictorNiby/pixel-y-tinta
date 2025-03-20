@@ -14,7 +14,7 @@
 const publicacion = require("../models/publicacion");
 const listar_publicacion = async (req, res) => {
   try {
-    const lista_publicacion = await publicacion.find();
+    const lista_publicacion = await publicacion.find().sort({"fecha_publicacion":-1});
     res.status(200).json({
       completado: true,
       publicaciones: lista_publicacion,

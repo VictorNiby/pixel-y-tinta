@@ -604,6 +604,7 @@ document.addEventListener('DOMContentLoaded',async()=>{
         modal.hide();
         limpiarTabla();
         cargarTabla(session_usuario);
+        document.getElementById("comentarioUsuario").value = ""
       } else {
         alertify.error("Error al agregar el comentario: " + datos.mensaje);
       }
