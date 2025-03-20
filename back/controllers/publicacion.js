@@ -35,16 +35,12 @@ const crear_publicacion = async (req, res) => {
     estado_publicacion,
     imagen_publicacion,
   } = req.body;
-
-
   if (!nombre_publicacion || !id_creador || !contenido_publicacion || !nombre_creador) {
     return res.status(400).json({
       completado: false,
       mensaje: "Faltan campos obligatorios.",
     });
   }
-
-
   try {
 
     const nueva_publicacion = new publicacion({
@@ -125,18 +121,23 @@ const actualizar_publicacion_id = async (req, res) => {
       },
       { new: true }
     );
+
     if (!publicacionActualizada) {
       return res.status(404).json({
         completado: false,
         mensaje: "Publicación no encontrada.",
       });
     }
+    
+    console.log("Publicación actualizada:", publicacionActualizada);
+
     res.status(200).json({
       completado: true,
       mensaje: "Publicación actualizada correctamente.",
       publicacion: publicacionActualizada,
     });
   } catch (error) {
+    console.error("Error en la actualización:", error);
     res.status(500).json({
       completado: false,
       mensaje: `Error al actualizar la publicación: ${error.message}`,

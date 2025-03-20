@@ -257,7 +257,7 @@ async function cargarTabla() {
                 ${
                   request !== null && request.completado && request.resultado.is_admin
                     ? `
-                      <button class="btn btn-outline-light me-2 btnEditar" data-id="${request.resultado._id}">
+                      <button class="btn btn-outline-light me-2 btnEditar" data-id="${publicacion._id}">
                         <i class="bi bi-pencil-square"></i>
                       </button>
                       <button class="btn btn-outline-light btnBorrar" data-id="${publicacion._id}">
@@ -351,8 +351,80 @@ async function ActualizarPFP(form) {
       method:"POST",
       body:form_data
   }).then(res => res.json())
-
 }
+function editarPublicacion(id) {
+  fetch(api + `buscar_publicacion/${id}`)
+    .then(res => res.json())
+    .then(data => {
+      if (data.completado) {  
+        document.getElementById("tituloPublicacion").value = data.publicacion.nombre_publicacion;
+        document.getElementById("contenidoPublicacion").value = data.publicacion.contenido_publicacion;
+        document.getElementById("btnActualizarPublicacion").dataset.id = id;
+        const modal = new bootstrap.Modal(document.getElementById("publicacionModal"));
+        modal.show();
+      } else {
+        alertify.error("No se pudo obtener la publicación.");
+      }
+    })
+    .catch(err => {
+      console.error("Error al obtener la publicación:", err);
+      alertify.error("Error al obtener los datos.");
+    });
+}
+document.addEventListener("DOMContentLoaded", function () {
+  const btnActualizarPublicacion = document.getElementById("btnActualizarPublicacion");
+  if (!btnActualizarPublicacion) {
+    console.error("El botón btnActualizarPublicacion no fue encontrado en el DOM.");
+    return;
+  }
+  btnActualizarPublicacion.addEventListener("click", function () {
+    const idPublicacion = btnActualizarPublicacion.dataset.id; 
+    const titulo = document.getElementById("tituloPublicacion").value.trim();
+    const contenido = document.getElementById("contenidoPublicacion").value.trim();
+    if (!idPublicacion) {
+      console.error("ID de publicación no definido.");
+      alertify.error("Error interno: No se encontró el ID de la publicación.");
+      return;
+    }
+    if (titulo === "" || contenido === "") {
+      alertify.error("Todos los campos son obligatorios.");
+      return;
+    }
+    fetch(api + `actualizar_publicacion/${idPublicacion}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ 
+        nombre_publicacion: titulo, 
+        contenido_publicacion: contenido 
+      }),
+    })
+      .then((res) => res.text())
+      .then((text) => {
+        try {
+          return JSON.parse(text);
+        } catch (err) {
+          throw new Error("La respuesta del servidor no es un JSON válido");
+        }
+      })
+      .then((res) => {
+        if (res.completado) {
+          alertify.success("Publicación actualizada con éxito.");
+          const modal = bootstrap.Modal.getInstance(document.getElementById("publicacionModal"));
+          modal.hide();
+          setTimeout(() => location.reload(), 50);
+        } else {
+          alertify.error(res.mensaje || "Error al actualizar la publicación.");
+        }
+      })
+      .catch((err) => {
+        console.error("Error en la solicitud:", err);
+        alertify.error("Error en la solicitud: " + err.message);
+      });
+  });
+});
+
 
 document.addEventListener('DOMContentLoaded',async()=>{
   
@@ -655,11 +727,6 @@ document.addEventListener('DOMContentLoaded',async()=>{
   });
 
 })
-
-
-
-
-
 
 
 
